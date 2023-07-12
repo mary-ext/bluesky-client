@@ -33,7 +33,7 @@
 	"scripts": {
 		"build:lib": "tsc",
 		"build:schema": "node ./scripts/generate-atp-schema.js",
-		"prepublishOnly": "pnpm run build:lib && pnpm run build:schema",
+		"prepublishOnly": "pnpm run build:schema && pnpm run build:lib",
 		"fmt": "prettier --cache --write ."
 	},
 	"devDependencies": {
