@@ -47,10 +47,10 @@ export interface Queries {
 	};
 	'app.bsky.actor.getProfiles': {
 		params: {
-			actors: (string)[];
+			actors: string[];
 		};
 		response: {
-			profiles: (RefOf<'app.bsky.actor.defs#profileViewDetailed'>)[];
+			profiles: RefOf<'app.bsky.actor.defs#profileViewDetailed'>[];
 		};
 	};
 	'app.bsky.actor.getSuggestions': {
@@ -60,7 +60,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			actors: (RefOf<'app.bsky.actor.defs#profileView'>)[];
+			actors: RefOf<'app.bsky.actor.defs#profileView'>[];
 		};
 	};
 	'app.bsky.actor.searchActors': {
@@ -71,7 +71,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			actors: (RefOf<'app.bsky.actor.defs#profileView'>)[];
+			actors: RefOf<'app.bsky.actor.defs#profileView'>[];
 		};
 	};
 	'app.bsky.actor.searchActorsTypeahead': {
@@ -80,13 +80,13 @@ export interface Queries {
 			limit?: number;
 		};
 		response: {
-			actors: (RefOf<'app.bsky.actor.defs#profileViewBasic'>)[];
+			actors: RefOf<'app.bsky.actor.defs#profileViewBasic'>[];
 		};
 	};
 	'app.bsky.feed.describeFeedGenerator': {
 		response: {
 			did: DID;
-			feeds: (RefOf<'app.bsky.feed.describeFeedGenerator#feed'>)[];
+			feeds: RefOf<'app.bsky.feed.describeFeedGenerator#feed'>[];
 			links?: RefOf<'app.bsky.feed.describeFeedGenerator#links'>;
 		};
 	};
@@ -98,7 +98,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			feeds: (RefOf<'app.bsky.feed.defs#generatorView'>)[];
+			feeds: RefOf<'app.bsky.feed.defs#generatorView'>[];
 		};
 	};
 	'app.bsky.feed.getAuthorFeed': {
@@ -109,11 +109,25 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			feed: (RefOf<'app.bsky.feed.defs#feedViewPost'>)[];
+			feed: RefOf<'app.bsky.feed.defs#feedViewPost'>[];
 		};
 		errors: {
 			BlockedActor: {};
 			BlockedByActor: {};
+		};
+	};
+	'app.bsky.feed.getFeed': {
+		params: {
+			feed: AtUri;
+			limit?: number;
+			cursor?: string;
+		};
+		response: {
+			cursor?: string;
+			feed: RefOf<'app.bsky.feed.defs#feedViewPost'>[];
+		};
+		errors: {
+			UnknownFeed: {};
 		};
 	};
 	'app.bsky.feed.getFeedGenerator': {
@@ -128,24 +142,10 @@ export interface Queries {
 	};
 	'app.bsky.feed.getFeedGenerators': {
 		params: {
-			feeds: (AtUri)[];
+			feeds: AtUri[];
 		};
 		response: {
-			feeds: (RefOf<'app.bsky.feed.defs#generatorView'>)[];
-		};
-	};
-	'app.bsky.feed.getFeed': {
-		params: {
-			feed: AtUri;
-			limit?: number;
-			cursor?: string;
-		};
-		response: {
-			cursor?: string;
-			feed: (RefOf<'app.bsky.feed.defs#feedViewPost'>)[];
-		};
-		errors: {
-			UnknownFeed: {};
+			feeds: RefOf<'app.bsky.feed.defs#generatorView'>[];
 		};
 	};
 	'app.bsky.feed.getFeedSkeleton': {
@@ -156,7 +156,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			feed: (RefOf<'app.bsky.feed.defs#skeletonFeedPost'>)[];
+			feed: RefOf<'app.bsky.feed.defs#skeletonFeedPost'>[];
 		};
 		errors: {
 			UnknownFeed: {};
@@ -173,15 +173,7 @@ export interface Queries {
 			uri: AtUri;
 			cid?: CID;
 			cursor?: string;
-			likes: (RefOf<'app.bsky.feed.getLikes#like'>)[];
-		};
-	};
-	'app.bsky.feed.getPosts': {
-		params: {
-			uris: (AtUri)[];
-		};
-		response: {
-			posts: (RefOf<'app.bsky.feed.defs#postView'>)[];
+			likes: RefOf<'app.bsky.feed.getLikes#like'>[];
 		};
 	};
 	'app.bsky.feed.getPostThread': {
@@ -191,10 +183,21 @@ export interface Queries {
 			parentHeight?: number;
 		};
 		response: {
-			thread: UnionOf<'app.bsky.feed.defs#threadViewPost'> | UnionOf<'app.bsky.feed.defs#notFoundPost'> | UnionOf<'app.bsky.feed.defs#blockedPost'>;
+			thread:
+				| UnionOf<'app.bsky.feed.defs#threadViewPost'>
+				| UnionOf<'app.bsky.feed.defs#notFoundPost'>
+				| UnionOf<'app.bsky.feed.defs#blockedPost'>;
 		};
 		errors: {
 			NotFound: {};
+		};
+	};
+	'app.bsky.feed.getPosts': {
+		params: {
+			uris: AtUri[];
+		};
+		response: {
+			posts: RefOf<'app.bsky.feed.defs#postView'>[];
 		};
 	};
 	'app.bsky.feed.getRepostedBy': {
@@ -208,7 +211,7 @@ export interface Queries {
 			uri: AtUri;
 			cid?: CID;
 			cursor?: string;
-			repostedBy: (RefOf<'app.bsky.actor.defs#profileView'>)[];
+			repostedBy: RefOf<'app.bsky.actor.defs#profileView'>[];
 		};
 	};
 	'app.bsky.feed.getTimeline': {
@@ -219,7 +222,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			feed: (RefOf<'app.bsky.feed.defs#feedViewPost'>)[];
+			feed: RefOf<'app.bsky.feed.defs#feedViewPost'>[];
 		};
 	};
 	'app.bsky.graph.getBlocks': {
@@ -229,7 +232,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			blocks: (RefOf<'app.bsky.actor.defs#profileView'>)[];
+			blocks: RefOf<'app.bsky.actor.defs#profileView'>[];
 		};
 	};
 	'app.bsky.graph.getFollowers': {
@@ -241,7 +244,7 @@ export interface Queries {
 		response: {
 			subject: RefOf<'app.bsky.actor.defs#profileView'>;
 			cursor?: string;
-			followers: (RefOf<'app.bsky.actor.defs#profileView'>)[];
+			followers: RefOf<'app.bsky.actor.defs#profileView'>[];
 		};
 	};
 	'app.bsky.graph.getFollows': {
@@ -253,7 +256,7 @@ export interface Queries {
 		response: {
 			subject: RefOf<'app.bsky.actor.defs#profileView'>;
 			cursor?: string;
-			follows: (RefOf<'app.bsky.actor.defs#profileView'>)[];
+			follows: RefOf<'app.bsky.actor.defs#profileView'>[];
 		};
 	};
 	'app.bsky.graph.getList': {
@@ -265,7 +268,7 @@ export interface Queries {
 		response: {
 			cursor?: string;
 			list: RefOf<'app.bsky.graph.defs#listView'>;
-			items: (RefOf<'app.bsky.graph.defs#listItemView'>)[];
+			items: RefOf<'app.bsky.graph.defs#listItemView'>[];
 		};
 	};
 	'app.bsky.graph.getListMutes': {
@@ -275,7 +278,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			lists: (RefOf<'app.bsky.graph.defs#listView'>)[];
+			lists: RefOf<'app.bsky.graph.defs#listView'>[];
 		};
 	};
 	'app.bsky.graph.getLists': {
@@ -286,7 +289,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			lists: (RefOf<'app.bsky.graph.defs#listView'>)[];
+			lists: RefOf<'app.bsky.graph.defs#listView'>[];
 		};
 	};
 	'app.bsky.graph.getMutes': {
@@ -296,7 +299,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			mutes: (RefOf<'app.bsky.actor.defs#profileView'>)[];
+			mutes: RefOf<'app.bsky.actor.defs#profileView'>[];
 		};
 	};
 	'app.bsky.notification.getUnreadCount': {
@@ -315,17 +318,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			notifications: (RefOf<'app.bsky.notification.listNotifications#notification'>)[];
-		};
-	};
-	'app.bsky.unspecced.getPopularFeedGenerators': {
-		params: {
-			limit?: number;
-			cursor?: string;
-		};
-		response: {
-			cursor?: string;
-			feeds: (RefOf<'app.bsky.feed.defs#generatorView'>)[];
+			notifications: RefOf<'app.bsky.notification.listNotifications#notification'>[];
 		};
 	};
 	'app.bsky.unspecced.getPopular': {
@@ -336,7 +329,17 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			feed: (RefOf<'app.bsky.feed.defs#feedViewPost'>)[];
+			feed: RefOf<'app.bsky.feed.defs#feedViewPost'>[];
+		};
+	};
+	'app.bsky.unspecced.getPopularFeedGenerators': {
+		params: {
+			limit?: number;
+			cursor?: string;
+		};
+		response: {
+			cursor?: string;
+			feeds: RefOf<'app.bsky.feed.defs#generatorView'>[];
 		};
 	};
 	'app.bsky.unspecced.getTimelineSkeleton': {
@@ -346,7 +349,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			feed: (RefOf<'app.bsky.feed.defs#skeletonFeedPost'>)[];
+			feed: RefOf<'app.bsky.feed.defs#skeletonFeedPost'>[];
 		};
 		errors: {
 			UnknownFeed: {};
@@ -360,7 +363,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			codes: (RefOf<'com.atproto.server.defs#inviteCode'>)[];
+			codes: RefOf<'com.atproto.server.defs#inviteCode'>[];
 		};
 	};
 	'com.atproto.admin.getModerationAction': {
@@ -377,7 +380,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			actions: (RefOf<'com.atproto.admin.defs#actionView'>)[];
+			actions: RefOf<'com.atproto.admin.defs#actionView'>[];
 		};
 	};
 	'com.atproto.admin.getModerationReport': {
@@ -389,17 +392,22 @@ export interface Queries {
 	'com.atproto.admin.getModerationReports': {
 		params: {
 			subject?: string;
-			ignoreSubjects?: (string)[];
-			reporters?: (string)[];
+			ignoreSubjects?: string[];
+			reporters?: string[];
 			resolved?: boolean;
-			actionType?: 'com.atproto.admin.defs#takedown' | 'com.atproto.admin.defs#flag' | 'com.atproto.admin.defs#acknowledge' | 'com.atproto.admin.defs#escalate' | (string & {});
+			actionType?:
+				| 'com.atproto.admin.defs#takedown'
+				| 'com.atproto.admin.defs#flag'
+				| 'com.atproto.admin.defs#acknowledge'
+				| 'com.atproto.admin.defs#escalate'
+				| (string & {});
 			limit?: number;
 			cursor?: string;
 			reverse?: boolean;
 		};
 		response: {
 			cursor?: string;
-			reports: (RefOf<'com.atproto.admin.defs#reportView'>)[];
+			reports: RefOf<'com.atproto.admin.defs#reportView'>[];
 		};
 	};
 	'com.atproto.admin.getRecord': {
@@ -430,7 +438,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			repos: (RefOf<'com.atproto.admin.defs#repoView'>)[];
+			repos: RefOf<'com.atproto.admin.defs#repoView'>[];
 		};
 	};
 	'com.atproto.identity.resolveHandle': {
@@ -443,14 +451,14 @@ export interface Queries {
 	};
 	'com.atproto.label.queryLabels': {
 		params: {
-			uriPatterns: (string)[];
-			sources?: (DID)[];
+			uriPatterns: string[];
+			sources?: DID[];
 			limit?: number;
 			cursor?: string;
 		};
 		response: {
 			cursor?: string;
-			labels: (RefOf<'com.atproto.label.defs#label'>)[];
+			labels: RefOf<'com.atproto.label.defs#label'>[];
 		};
 	};
 	'com.atproto.repo.describeRepo': {
@@ -461,7 +469,7 @@ export interface Queries {
 			handle: Handle;
 			did: DID;
 			didDoc: unknown;
-			collections: (string)[];
+			collections: string[];
 			handleIsCorrect: boolean;
 		};
 	};
@@ -490,13 +498,13 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			records: (RefOf<'com.atproto.repo.listRecords#record'>)[];
+			records: RefOf<'com.atproto.repo.listRecords#record'>[];
 		};
 	};
 	'com.atproto.server.describeServer': {
 		response: {
 			inviteCodeRequired?: boolean;
-			availableUserDomains: (string)[];
+			availableUserDomains: string[];
 			links?: RefOf<'com.atproto.server.describeServer#links'>;
 		};
 	};
@@ -506,7 +514,7 @@ export interface Queries {
 			createAvailable?: boolean;
 		};
 		response: {
-			codes: (RefOf<'com.atproto.server.defs#inviteCode'>)[];
+			codes: RefOf<'com.atproto.server.defs#inviteCode'>[];
 		};
 		errors: {
 			DuplicateCreate: {};
@@ -521,7 +529,7 @@ export interface Queries {
 	};
 	'com.atproto.server.listAppPasswords': {
 		response: {
-			passwords: (RefOf<'com.atproto.server.listAppPasswords#appPassword'>)[];
+			passwords: RefOf<'com.atproto.server.listAppPasswords#appPassword'>[];
 		};
 		errors: {
 			AccountTakedown: {};
@@ -537,7 +545,7 @@ export interface Queries {
 	'com.atproto.sync.getBlocks': {
 		params: {
 			did: DID;
-			cids: (CID)[];
+			cids: CID[];
 		};
 		response: unknown;
 	};
@@ -555,7 +563,7 @@ export interface Queries {
 			earliest?: CID;
 		};
 		response: {
-			commits: (CID)[];
+			commits: CID[];
 		};
 	};
 	'com.atproto.sync.getHead': {
@@ -593,7 +601,7 @@ export interface Queries {
 			earliest?: CID;
 		};
 		response: {
-			cids: (CID)[];
+			cids: CID[];
 		};
 	};
 	'com.atproto.sync.listRepos': {
@@ -603,7 +611,7 @@ export interface Queries {
 		};
 		response: {
 			cursor?: string;
-			repos: (RefOf<'com.atproto.sync.listRepos#repo'>)[];
+			repos: RefOf<'com.atproto.sync.listRepos#repo'>[];
 		};
 	};
 }
@@ -646,8 +654,8 @@ export interface Procedures {
 	};
 	'com.atproto.admin.disableInviteCodes': {
 		data: {
-			codes?: (string)[];
-			accounts?: (string)[];
+			codes?: string[];
+			accounts?: string[];
 		};
 	};
 	'com.atproto.admin.enableAccountInvites': {
@@ -668,7 +676,7 @@ export interface Procedures {
 	'com.atproto.admin.resolveModerationReports': {
 		data: {
 			actionId: number;
-			reportIds: (number)[];
+			reportIds: number[];
 			createdBy: DID;
 		};
 		response: RefOf<'com.atproto.admin.defs#actionView'>;
@@ -683,11 +691,15 @@ export interface Procedures {
 	};
 	'com.atproto.admin.takeModerationAction': {
 		data: {
-			action: 'com.atproto.admin.defs#takedown' | 'com.atproto.admin.defs#flag' | 'com.atproto.admin.defs#acknowledge' | (string & {});
+			action:
+				| 'com.atproto.admin.defs#takedown'
+				| 'com.atproto.admin.defs#flag'
+				| 'com.atproto.admin.defs#acknowledge'
+				| (string & {});
 			subject: UnionOf<'com.atproto.admin.defs#repoRef'> | UnionOf<'com.atproto.repo.strongRef'>;
-			subjectBlobCids?: (CID)[];
-			createLabelVals?: (string)[];
-			negateLabelVals?: (string)[];
+			subjectBlobCids?: CID[];
+			createLabelVals?: string[];
+			negateLabelVals?: string[];
 			reason: string;
 			createdBy: DID;
 		};
@@ -732,7 +744,11 @@ export interface Procedures {
 		data: {
 			repo: string;
 			validate?: boolean;
-			writes: (UnionOf<'com.atproto.repo.applyWrites#create'> | UnionOf<'com.atproto.repo.applyWrites#update'> | UnionOf<'com.atproto.repo.applyWrites#delete'>)[];
+			writes: (
+				| UnionOf<'com.atproto.repo.applyWrites#create'>
+				| UnionOf<'com.atproto.repo.applyWrites#update'>
+				| UnionOf<'com.atproto.repo.applyWrites#delete'>
+			)[];
 			swapCommit?: CID;
 		};
 		errors: {
@@ -849,10 +865,10 @@ export interface Procedures {
 		data: {
 			codeCount: number;
 			useCount: number;
-			forAccounts?: (DID)[];
+			forAccounts?: DID[];
 		};
 		response: {
-			codes: (RefOf<'com.atproto.server.createInviteCodes#accountCodes'>)[];
+			codes: RefOf<'com.atproto.server.createInviteCodes#accountCodes'>[];
 		};
 	};
 	'com.atproto.server.createSession': {
@@ -882,8 +898,7 @@ export interface Procedures {
 			InvalidToken: {};
 		};
 	};
-	'com.atproto.server.deleteSession': {
-	};
+	'com.atproto.server.deleteSession': {};
 	'com.atproto.server.refreshSession': {
 		response: {
 			accessJwt: string;
@@ -895,8 +910,7 @@ export interface Procedures {
 			AccountTakedown: {};
 		};
 	};
-	'com.atproto.server.requestAccountDelete': {
-	};
+	'com.atproto.server.requestAccountDelete': {};
 	'com.atproto.server.requestPasswordReset': {
 		data: {
 			email: string;
@@ -929,8 +943,7 @@ export interface Procedures {
 	};
 }
 
-export interface Subscriptions {
-}
+export interface Subscriptions {}
 
 export interface Objects {
 	'app.bsky.actor.defs#profileViewBasic': {
@@ -939,7 +952,7 @@ export interface Objects {
 		displayName?: string;
 		avatar?: string;
 		viewer?: RefOf<'app.bsky.actor.defs#viewerState'>;
-		labels?: (RefOf<'com.atproto.label.defs#label'>)[];
+		labels?: RefOf<'com.atproto.label.defs#label'>[];
 	};
 	'app.bsky.actor.defs#profileView': {
 		did: DID;
@@ -949,7 +962,7 @@ export interface Objects {
 		avatar?: string;
 		indexedAt?: string;
 		viewer?: RefOf<'app.bsky.actor.defs#viewerState'>;
-		labels?: (RefOf<'com.atproto.label.defs#label'>)[];
+		labels?: RefOf<'com.atproto.label.defs#label'>[];
 	};
 	'app.bsky.actor.defs#profileViewDetailed': {
 		did: DID;
@@ -963,7 +976,7 @@ export interface Objects {
 		postsCount?: number;
 		indexedAt?: string;
 		viewer?: RefOf<'app.bsky.actor.defs#viewerState'>;
-		labels?: (RefOf<'com.atproto.label.defs#label'>)[];
+		labels?: RefOf<'com.atproto.label.defs#label'>[];
 	};
 	'app.bsky.actor.defs#viewerState': {
 		muted?: boolean;
@@ -973,7 +986,11 @@ export interface Objects {
 		following?: AtUri;
 		followedBy?: AtUri;
 	};
-	'app.bsky.actor.defs#preferences': (UnionOf<'app.bsky.actor.defs#adultContentPref'> | UnionOf<'app.bsky.actor.defs#contentLabelPref'> | UnionOf<'app.bsky.actor.defs#savedFeedsPref'>)[];
+	'app.bsky.actor.defs#preferences': (
+		| UnionOf<'app.bsky.actor.defs#adultContentPref'>
+		| UnionOf<'app.bsky.actor.defs#contentLabelPref'>
+		| UnionOf<'app.bsky.actor.defs#savedFeedsPref'>
+	)[];
 	'app.bsky.actor.defs#adultContentPref': {
 		enabled: boolean;
 	};
@@ -982,8 +999,8 @@ export interface Objects {
 		visibility: 'show' | 'warn' | 'hide' | (string & {});
 	};
 	'app.bsky.actor.defs#savedFeedsPref': {
-		pinned: (AtUri)[];
-		saved: (AtUri)[];
+		pinned: AtUri[];
+		saved: AtUri[];
 	};
 	'app.bsky.embed.external': {
 		external: RefOf<'app.bsky.embed.external#external'>;
@@ -1004,14 +1021,14 @@ export interface Objects {
 		thumb?: string;
 	};
 	'app.bsky.embed.images': {
-		images: (RefOf<'app.bsky.embed.images#image'>)[];
+		images: RefOf<'app.bsky.embed.images#image'>[];
 	};
 	'app.bsky.embed.images#image': {
 		image: AtBlob<`image/${string}`>;
 		alt: string;
 	};
 	'app.bsky.embed.images#view': {
-		images: (RefOf<'app.bsky.embed.images#viewImage'>)[];
+		images: RefOf<'app.bsky.embed.images#viewImage'>[];
 	};
 	'app.bsky.embed.images#viewImage': {
 		thumb: string;
@@ -1022,15 +1039,25 @@ export interface Objects {
 		record: RefOf<'com.atproto.repo.strongRef'>;
 	};
 	'app.bsky.embed.record#view': {
-		record: UnionOf<'app.bsky.embed.record#viewRecord'> | UnionOf<'app.bsky.embed.record#viewNotFound'> | UnionOf<'app.bsky.embed.record#viewBlocked'> | UnionOf<'app.bsky.feed.defs#generatorView'> | UnionOf<'app.bsky.graph.defs#listView'>;
+		record:
+			| UnionOf<'app.bsky.embed.record#viewRecord'>
+			| UnionOf<'app.bsky.embed.record#viewNotFound'>
+			| UnionOf<'app.bsky.embed.record#viewBlocked'>
+			| UnionOf<'app.bsky.feed.defs#generatorView'>
+			| UnionOf<'app.bsky.graph.defs#listView'>;
 	};
 	'app.bsky.embed.record#viewRecord': {
 		uri: AtUri;
 		cid: CID;
 		author: RefOf<'app.bsky.actor.defs#profileViewBasic'>;
 		value: unknown;
-		labels?: (RefOf<'com.atproto.label.defs#label'>)[];
-		embeds?: (UnionOf<'app.bsky.embed.images#view'> | UnionOf<'app.bsky.embed.external#view'> | UnionOf<'app.bsky.embed.record#view'> | UnionOf<'app.bsky.embed.recordWithMedia#view'>)[];
+		labels?: RefOf<'com.atproto.label.defs#label'>[];
+		embeds?: (
+			| UnionOf<'app.bsky.embed.images#view'>
+			| UnionOf<'app.bsky.embed.external#view'>
+			| UnionOf<'app.bsky.embed.record#view'>
+			| UnionOf<'app.bsky.embed.recordWithMedia#view'>
+		)[];
 		indexedAt: string;
 	};
 	'app.bsky.embed.record#viewNotFound': {
@@ -1052,13 +1079,17 @@ export interface Objects {
 		cid: CID;
 		author: RefOf<'app.bsky.actor.defs#profileViewBasic'>;
 		record: unknown;
-		embed?: UnionOf<'app.bsky.embed.images#view'> | UnionOf<'app.bsky.embed.external#view'> | UnionOf<'app.bsky.embed.record#view'> | UnionOf<'app.bsky.embed.recordWithMedia#view'>;
+		embed?:
+			| UnionOf<'app.bsky.embed.images#view'>
+			| UnionOf<'app.bsky.embed.external#view'>
+			| UnionOf<'app.bsky.embed.record#view'>
+			| UnionOf<'app.bsky.embed.recordWithMedia#view'>;
 		replyCount?: number;
 		repostCount?: number;
 		likeCount?: number;
 		indexedAt: string;
 		viewer?: RefOf<'app.bsky.feed.defs#viewerState'>;
-		labels?: (RefOf<'com.atproto.label.defs#label'>)[];
+		labels?: RefOf<'com.atproto.label.defs#label'>[];
 	};
 	'app.bsky.feed.defs#viewerState': {
 		repost?: AtUri;
@@ -1070,8 +1101,14 @@ export interface Objects {
 		reason?: UnionOf<'app.bsky.feed.defs#reasonRepost'>;
 	};
 	'app.bsky.feed.defs#replyRef': {
-		root: UnionOf<'app.bsky.feed.defs#postView'> | UnionOf<'app.bsky.feed.defs#notFoundPost'> | UnionOf<'app.bsky.feed.defs#blockedPost'>;
-		parent: UnionOf<'app.bsky.feed.defs#postView'> | UnionOf<'app.bsky.feed.defs#notFoundPost'> | UnionOf<'app.bsky.feed.defs#blockedPost'>;
+		root:
+			| UnionOf<'app.bsky.feed.defs#postView'>
+			| UnionOf<'app.bsky.feed.defs#notFoundPost'>
+			| UnionOf<'app.bsky.feed.defs#blockedPost'>;
+		parent:
+			| UnionOf<'app.bsky.feed.defs#postView'>
+			| UnionOf<'app.bsky.feed.defs#notFoundPost'>
+			| UnionOf<'app.bsky.feed.defs#blockedPost'>;
 	};
 	'app.bsky.feed.defs#reasonRepost': {
 		by: RefOf<'app.bsky.actor.defs#profileViewBasic'>;
@@ -1079,8 +1116,15 @@ export interface Objects {
 	};
 	'app.bsky.feed.defs#threadViewPost': {
 		post: RefOf<'app.bsky.feed.defs#postView'>;
-		parent?: UnionOf<'app.bsky.feed.defs#threadViewPost'> | UnionOf<'app.bsky.feed.defs#notFoundPost'> | UnionOf<'app.bsky.feed.defs#blockedPost'>;
-		replies?: (UnionOf<'app.bsky.feed.defs#threadViewPost'> | UnionOf<'app.bsky.feed.defs#notFoundPost'> | UnionOf<'app.bsky.feed.defs#blockedPost'>)[];
+		parent?:
+			| UnionOf<'app.bsky.feed.defs#threadViewPost'>
+			| UnionOf<'app.bsky.feed.defs#notFoundPost'>
+			| UnionOf<'app.bsky.feed.defs#blockedPost'>;
+		replies?: (
+			| UnionOf<'app.bsky.feed.defs#threadViewPost'>
+			| UnionOf<'app.bsky.feed.defs#notFoundPost'>
+			| UnionOf<'app.bsky.feed.defs#blockedPost'>
+		)[];
 	};
 	'app.bsky.feed.defs#notFoundPost': {
 		uri: AtUri;
@@ -1097,7 +1141,7 @@ export interface Objects {
 		creator: RefOf<'app.bsky.actor.defs#profileView'>;
 		displayName: string;
 		description?: string;
-		descriptionFacets?: (RefOf<'app.bsky.richtext.facet'>)[];
+		descriptionFacets?: RefOf<'app.bsky.richtext.facet'>[];
 		avatar?: string;
 		likeCount?: number;
 		viewer?: RefOf<'app.bsky.feed.defs#generatorViewerState'>;
@@ -1154,7 +1198,7 @@ export interface Objects {
 		name: string;
 		purpose: RefOf<'app.bsky.graph.defs#listPurpose'>;
 		description?: string;
-		descriptionFacets?: (RefOf<'app.bsky.richtext.facet'>)[];
+		descriptionFacets?: RefOf<'app.bsky.richtext.facet'>[];
 		avatar?: string;
 		viewer?: RefOf<'app.bsky.graph.defs#listViewerState'>;
 		indexedAt: string;
@@ -1176,7 +1220,7 @@ export interface Objects {
 		record: unknown;
 		isRead: boolean;
 		indexedAt: string;
-		labels?: (RefOf<'com.atproto.label.defs#label'>)[];
+		labels?: RefOf<'com.atproto.label.defs#label'>[];
 	};
 	'app.bsky.richtext.facet': {
 		index: RefOf<'app.bsky.richtext.facet#byteSlice'>;
@@ -1196,27 +1240,31 @@ export interface Objects {
 		id: number;
 		action: RefOf<'com.atproto.admin.defs#actionType'>;
 		subject: UnionOf<'com.atproto.admin.defs#repoRef'> | UnionOf<'com.atproto.repo.strongRef'>;
-		subjectBlobCids: (string)[];
-		createLabelVals?: (string)[];
-		negateLabelVals?: (string)[];
+		subjectBlobCids: string[];
+		createLabelVals?: string[];
+		negateLabelVals?: string[];
 		reason: string;
 		createdBy: DID;
 		createdAt: string;
 		reversal?: RefOf<'com.atproto.admin.defs#actionReversal'>;
-		resolvedReportIds: (number)[];
+		resolvedReportIds: number[];
 	};
 	'com.atproto.admin.defs#actionViewDetail': {
 		id: number;
 		action: RefOf<'com.atproto.admin.defs#actionType'>;
-		subject: UnionOf<'com.atproto.admin.defs#repoView'> | UnionOf<'com.atproto.admin.defs#repoViewNotFound'> | UnionOf<'com.atproto.admin.defs#recordView'> | UnionOf<'com.atproto.admin.defs#recordViewNotFound'>;
-		subjectBlobs: (RefOf<'com.atproto.admin.defs#blobView'>)[];
-		createLabelVals?: (string)[];
-		negateLabelVals?: (string)[];
+		subject:
+			| UnionOf<'com.atproto.admin.defs#repoView'>
+			| UnionOf<'com.atproto.admin.defs#repoViewNotFound'>
+			| UnionOf<'com.atproto.admin.defs#recordView'>
+			| UnionOf<'com.atproto.admin.defs#recordViewNotFound'>;
+		subjectBlobs: RefOf<'com.atproto.admin.defs#blobView'>[];
+		createLabelVals?: string[];
+		negateLabelVals?: string[];
 		reason: string;
 		createdBy: DID;
 		createdAt: string;
 		reversal?: RefOf<'com.atproto.admin.defs#actionReversal'>;
-		resolvedReports: (RefOf<'com.atproto.admin.defs#reportView'>)[];
+		resolvedReports: RefOf<'com.atproto.admin.defs#reportView'>[];
 	};
 	'com.atproto.admin.defs#actionViewCurrent': {
 		id: number;
@@ -1240,22 +1288,26 @@ export interface Objects {
 		subject: UnionOf<'com.atproto.admin.defs#repoRef'> | UnionOf<'com.atproto.repo.strongRef'>;
 		reportedBy: DID;
 		createdAt: string;
-		resolvedByActionIds: (number)[];
+		resolvedByActionIds: number[];
 	};
 	'com.atproto.admin.defs#reportViewDetail': {
 		id: number;
 		reasonType: RefOf<'com.atproto.moderation.defs#reasonType'>;
 		reason?: string;
-		subject: UnionOf<'com.atproto.admin.defs#repoView'> | UnionOf<'com.atproto.admin.defs#repoViewNotFound'> | UnionOf<'com.atproto.admin.defs#recordView'> | UnionOf<'com.atproto.admin.defs#recordViewNotFound'>;
+		subject:
+			| UnionOf<'com.atproto.admin.defs#repoView'>
+			| UnionOf<'com.atproto.admin.defs#repoViewNotFound'>
+			| UnionOf<'com.atproto.admin.defs#recordView'>
+			| UnionOf<'com.atproto.admin.defs#recordViewNotFound'>;
 		reportedBy: DID;
 		createdAt: string;
-		resolvedByActions: (RefOf<'com.atproto.admin.defs#actionView'>)[];
+		resolvedByActions: RefOf<'com.atproto.admin.defs#actionView'>[];
 	};
 	'com.atproto.admin.defs#repoView': {
 		did: DID;
 		handle: Handle;
 		email?: string;
-		relatedRecords: (unknown)[];
+		relatedRecords: unknown[];
 		indexedAt: string;
 		moderation: RefOf<'com.atproto.admin.defs#moderation'>;
 		invitedBy?: RefOf<'com.atproto.server.defs#inviteCode'>;
@@ -1265,12 +1317,12 @@ export interface Objects {
 		did: DID;
 		handle: Handle;
 		email?: string;
-		relatedRecords: (unknown)[];
+		relatedRecords: unknown[];
 		indexedAt: string;
 		moderation: RefOf<'com.atproto.admin.defs#moderationDetail'>;
-		labels?: (RefOf<'com.atproto.label.defs#label'>)[];
+		labels?: RefOf<'com.atproto.label.defs#label'>[];
 		invitedBy?: RefOf<'com.atproto.server.defs#inviteCode'>;
-		invites?: (RefOf<'com.atproto.server.defs#inviteCode'>)[];
+		invites?: RefOf<'com.atproto.server.defs#inviteCode'>[];
 		invitesDisabled?: boolean;
 	};
 	'com.atproto.admin.defs#repoViewNotFound': {
@@ -1283,7 +1335,7 @@ export interface Objects {
 		uri: AtUri;
 		cid: CID;
 		value: unknown;
-		blobCids: (CID)[];
+		blobCids: CID[];
 		indexedAt: string;
 		moderation: RefOf<'com.atproto.admin.defs#moderation'>;
 		repo: RefOf<'com.atproto.admin.defs#repoView'>;
@@ -1292,8 +1344,8 @@ export interface Objects {
 		uri: AtUri;
 		cid: CID;
 		value: unknown;
-		blobs: (RefOf<'com.atproto.admin.defs#blobView'>)[];
-		labels?: (RefOf<'com.atproto.label.defs#label'>)[];
+		blobs: RefOf<'com.atproto.admin.defs#blobView'>[];
+		labels?: RefOf<'com.atproto.label.defs#label'>[];
 		indexedAt: string;
 		moderation: RefOf<'com.atproto.admin.defs#moderationDetail'>;
 		repo: RefOf<'com.atproto.admin.defs#repoView'>;
@@ -1306,8 +1358,8 @@ export interface Objects {
 	};
 	'com.atproto.admin.defs#moderationDetail': {
 		currentAction?: RefOf<'com.atproto.admin.defs#actionViewCurrent'>;
-		actions: (RefOf<'com.atproto.admin.defs#actionView'>)[];
-		reports: (RefOf<'com.atproto.admin.defs#reportView'>)[];
+		actions: RefOf<'com.atproto.admin.defs#actionView'>[];
+		reports: RefOf<'com.atproto.admin.defs#reportView'>[];
 	};
 	'com.atproto.admin.defs#blobView': {
 		cid: CID;
@@ -1336,13 +1388,20 @@ export interface Objects {
 	};
 	'com.atproto.label.subscribeLabels#labels': {
 		seq: number;
-		labels: (RefOf<'com.atproto.label.defs#label'>)[];
+		labels: RefOf<'com.atproto.label.defs#label'>[];
 	};
 	'com.atproto.label.subscribeLabels#info': {
 		name: 'OutdatedCursor' | (string & {});
 		message?: string;
 	};
-	'com.atproto.moderation.defs#reasonType': 'com.atproto.moderation.defs#reasonSpam' | 'com.atproto.moderation.defs#reasonViolation' | 'com.atproto.moderation.defs#reasonMisleading' | 'com.atproto.moderation.defs#reasonSexual' | 'com.atproto.moderation.defs#reasonRude' | 'com.atproto.moderation.defs#reasonOther' | (string & {});
+	'com.atproto.moderation.defs#reasonType':
+		| 'com.atproto.moderation.defs#reasonSpam'
+		| 'com.atproto.moderation.defs#reasonViolation'
+		| 'com.atproto.moderation.defs#reasonMisleading'
+		| 'com.atproto.moderation.defs#reasonSexual'
+		| 'com.atproto.moderation.defs#reasonRude'
+		| 'com.atproto.moderation.defs#reasonOther'
+		| (string & {});
 	'com.atproto.moderation.defs#reasonSpam': 'com.atproto.moderation.defs#reasonSpam';
 	'com.atproto.moderation.defs#reasonViolation': 'com.atproto.moderation.defs#reasonViolation';
 	'com.atproto.moderation.defs#reasonMisleading': 'com.atproto.moderation.defs#reasonMisleading';
@@ -1379,7 +1438,7 @@ export interface Objects {
 	};
 	'com.atproto.server.createInviteCodes#accountCodes': {
 		account: string;
-		codes: (string)[];
+		codes: string[];
 	};
 	'com.atproto.server.defs#inviteCode': {
 		code: string;
@@ -1388,7 +1447,7 @@ export interface Objects {
 		forAccount: string;
 		createdBy: string;
 		createdAt: string;
-		uses: (RefOf<'com.atproto.server.defs#inviteCodeUse'>)[];
+		uses: RefOf<'com.atproto.server.defs#inviteCodeUse'>[];
 	};
 	'com.atproto.server.defs#inviteCodeUse': {
 		usedBy: DID;
@@ -1414,8 +1473,8 @@ export interface Objects {
 		commit: unknown;
 		prev: unknown;
 		blocks: unknown;
-		ops: (RefOf<'com.atproto.sync.subscribeRepos#repoOp'>)[];
-		blobs: (unknown)[];
+		ops: RefOf<'com.atproto.sync.subscribeRepos#repoOp'>[];
+		blobs: unknown[];
 		time: string;
 	};
 	'com.atproto.sync.subscribeRepos#handle': {
@@ -1452,51 +1511,55 @@ export interface Records {
 		description?: string;
 		avatar?: AtBlob<`image/png` | `image/jpeg`>;
 		banner?: AtBlob<`image/png` | `image/jpeg`>;
-	}
+	};
 	'app.bsky.feed.generator': {
 		did: DID;
 		displayName: string;
 		description?: string;
-		descriptionFacets?: (RefOf<'app.bsky.richtext.facet'>)[];
+		descriptionFacets?: RefOf<'app.bsky.richtext.facet'>[];
 		avatar?: AtBlob<`image/png` | `image/jpeg`>;
 		createdAt: string;
-	}
+	};
 	'app.bsky.feed.like': {
 		subject: RefOf<'com.atproto.repo.strongRef'>;
 		createdAt: string;
-	}
+	};
 	'app.bsky.feed.post': {
 		text: string;
-		entities?: (RefOf<'app.bsky.feed.post#entity'>)[];
-		facets?: (RefOf<'app.bsky.richtext.facet'>)[];
+		entities?: RefOf<'app.bsky.feed.post#entity'>[];
+		facets?: RefOf<'app.bsky.richtext.facet'>[];
 		reply?: RefOf<'app.bsky.feed.post#replyRef'>;
-		embed?: UnionOf<'app.bsky.embed.images'> | UnionOf<'app.bsky.embed.external'> | UnionOf<'app.bsky.embed.record'> | UnionOf<'app.bsky.embed.recordWithMedia'>;
-		langs?: (string)[];
+		embed?:
+			| UnionOf<'app.bsky.embed.images'>
+			| UnionOf<'app.bsky.embed.external'>
+			| UnionOf<'app.bsky.embed.record'>
+			| UnionOf<'app.bsky.embed.recordWithMedia'>;
+		langs?: string[];
 		createdAt: string;
-	}
+	};
 	'app.bsky.feed.repost': {
 		subject: RefOf<'com.atproto.repo.strongRef'>;
 		createdAt: string;
-	}
+	};
 	'app.bsky.graph.block': {
 		subject: DID;
 		createdAt: string;
-	}
+	};
 	'app.bsky.graph.follow': {
 		subject: DID;
 		createdAt: string;
-	}
-	'app.bsky.graph.listitem': {
-		subject: DID;
-		list: AtUri;
-		createdAt: string;
-	}
+	};
 	'app.bsky.graph.list': {
 		purpose: RefOf<'app.bsky.graph.defs#listPurpose'>;
 		name: string;
 		description?: string;
-		descriptionFacets?: (RefOf<'app.bsky.richtext.facet'>)[];
+		descriptionFacets?: RefOf<'app.bsky.richtext.facet'>[];
 		avatar?: AtBlob<`image/png` | `image/jpeg`>;
 		createdAt: string;
-	}
+	};
+	'app.bsky.graph.listitem': {
+		subject: DID;
+		list: AtUri;
+		createdAt: string;
+	};
 }

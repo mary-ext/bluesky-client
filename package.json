@@ -32,12 +32,13 @@
 	},
 	"scripts": {
 		"build:lib": "tsc",
-		"build:schema": "node ./scripts/generate-atp-schema.js ./lexicons/app/bsky/*/*.json ./lexicons/com/atproto/*/*.json",
+		"build:schema": "node ./scripts/generate-atp-schema.js",
 		"prepublishOnly": "pnpm run build:lib && pnpm run build:schema",
 		"fmt": "prettier --cache --write ."
 	},
 	"devDependencies": {
 		"@tiptap/core": "^2.0.3",
+		"fast-glob": "^3.3.0",
 		"graphemer": "^1.4.0",
 		"prettier": "^2.8.8",
 		"typescript": "^5.1.6"

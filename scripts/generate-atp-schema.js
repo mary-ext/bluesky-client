@@ -1,5 +1,9 @@
-import * as process from 'node:process';
 import * as fs from 'node:fs';
+
+import fg from 'fast-glob';
+import prettier from 'prettier';
+
+const outfile = './lib/atp-schema.ts';
 
 const writers = {
 	queries: [],
@@ -77,7 +81,7 @@ const resolveType = (lv, ns, def) => {
 	return value;
 };
 
-for (const filename of process.argv.slice(2)) {
+for (const filename of fg.sync('lexicons/**/*.json')) {
 	const jsonString = fs.readFileSync(filename);
 	const json = JSON.parse(jsonString);
 
@@ -195,4 +199,8 @@ ${wrap(writers.objects, 'export interface Objects {', '}')}
 ${wrap(writers.records, 'export interface Records {', '}')}
 `;
 
-fs.writeFileSync('./lib/atp-schema.ts', result);
+console.log(`running prettier`);
+const config = await prettier.resolveConfig(outfile);
+const formatted = prettier.format(result, { ...config, parser: 'babel-ts' });
+
+fs.writeFileSync(outfile, formatted);
