@@ -32,3 +32,39 @@ The points above leads to `@intrnl/bluesky-client`, where the following tradeoff
 
 - No RichText class for handling texts with facets, examples as to how you can
   deal with RichText are available on the `examples/` folder.
+
+## Usage
+
+Creating an agent to make requests...
+
+```ts
+import { Agent } from '@intrnl/bluesky-client/agent';
+
+const agent = new Agent({ serviceUri: '...' });
+
+await agent.login({
+	identifier: '...',
+	password: '...',
+});
+
+const profile = await agent.rpc.get('app.bsky.actor.getProfile', {
+	params: {
+		actor: 'did:plc:ragtjsm2j2vknwkz3zp4oxrd',
+	},
+});
+
+console.log(profile);
+```
+
+Fiddling with AT Proto schema...
+
+```ts
+import { type UnionOf } from '@intrnl/bluesky-client/atp-schema';
+
+type MentionFacet = UnionOf<'app.bsky.richtext.facet#mention'>;
+
+const mention: MentionFacet = {
+	$type: 'app.bsky.richtext.facet#mention',
+	did: 'did:plc:ragtjsm2j2vknwkz3zp4oxrd',
+};
+```
