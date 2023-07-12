@@ -1,5 +1,7 @@
 # bluesky-client
 
+[![library size badge](https://deno.bundlejs.com/badge?q=@intrnl/bluesky-client@0.1.0/agent)](https://bundlejs.com/?q=@intrnl/bluesky-client@0.1.0/agent)
+
 Lightweight API client for Bluesky/AT Protocol.
 
 ```
@@ -8,7 +10,7 @@ npm install @intrnl/bluesky-client
 
 ## Why?
 
-The official `@atproto/api` library is big!
+The official `@atproto/api` library is big! [![library size badge](https://deno.bundlejs.com/badge?q=@atproto/api@0.4.0)](https://bundlejs.com/?q=@atproto/api@0.4.0)
 
 - The lexicon codegen generates a ton of classes and functions due to the API being designed around RPC and namespaces. These can't be treeshaken at all if you only need access to some of the endpoints.
 - The library unnecessarily bundles dependencies like `graphemer` and `zod`, which causes duplication in your app code if you also rely on said libraries.
