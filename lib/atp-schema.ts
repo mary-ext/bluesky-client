@@ -1,3 +1,4 @@
+
 export type CID = string;
 
 export type DID = `did:${string}`;
@@ -30,12 +31,17 @@ export type ResponseOf<K extends keyof Queries | keyof Procedures> = K extends k
 export type RefOf<K extends keyof Objects> = Objects[K];
 export type UnionOf<K extends keyof Objects> = Objects[K] & { $type: K };
 
-export interface Queries {}
+export interface Queries {
+}
 
-export interface Procedures {}
+export interface Procedures {
+}
 
-export interface Subscriptions {}
+export interface Subscriptions {
+}
 
-export interface Objects {}
+export interface Objects {
+}
 
-export interface Records {}
+export interface Records {
+}
