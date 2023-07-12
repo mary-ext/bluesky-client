@@ -1,0 +1,44 @@
+{
+	"type": "module",
+	"name": "@intrnl/bluesky-client",
+	"description": "Lightweight API client for Bluesky/AT Protocol",
+	"version": "0.1.0",
+	"author": "intrnl",
+	"license": "MIT",
+	"repository": {
+		"url": "https://codeberg.org/intrnl/bluesky-client"
+	},
+	"packageManager": "pnpm@8.6.5",
+	"files": [
+		"dist",
+		"!dist/tsconfig.tsbuildinfo"
+	],
+	"exports": {
+		"./agent": {
+			"types": "./dist/agent.d.ts",
+			"import": "./dist/agent.js"
+		},
+		"./atp-schema": {
+			"types": "./dist/atp-schema.d.ts"
+		},
+		"./xrpc-utils": {
+			"types": "./dist/xrpc-utils.d.ts",
+			"import": "./dist/xrpc-utils.js"
+		},
+		"./xrpc": {
+			"types": "./dist/xrpc.d.ts",
+			"import": "./dist/xrpc.js"
+		}
+	},
+	"scripts": {
+		"build": "tsc",
+		"prepublishOnly": "pnpm run build",
+		"fmt": "prettier --cache --write ."
+	},
+	"devDependencies": {
+		"@tiptap/core": "^2.0.3",
+		"graphemer": "^1.4.0",
+		"prettier": "^2.8.8",
+		"typescript": "^5.1.6"
+	}
+}
