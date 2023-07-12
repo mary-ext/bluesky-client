@@ -2,6 +2,10 @@
 
 Lightweight API client for Bluesky/AT Protocol.
 
+```
+npm install @intrnl/bluesky-client
+```
+
 ## Why?
 
 The official `@atproto/api` library is big!
