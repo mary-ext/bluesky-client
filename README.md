@@ -17,7 +17,7 @@ The official `@atproto/api` library is big! [![library size badge](https://deno.
 
 The points above leads to `@intrnl/bluesky-client`, where the following tradeoffs are made instead:
 
-- We only provide TypeScript definitions for endpoints, objects, and records, as such **there is no validation done in the library, proceed with caution**.
+- We only provide TypeScript definitions for endpoints, objects, and records, **there is no runtime validation done in the library, proceed with caution**.
 - Queries and procedures are not accessed via property access, you're typing the nsid as a string instead.
 
   ```typescript
@@ -37,12 +37,12 @@ The points above leads to `@intrnl/bluesky-client`, where the following tradeoff
 
 ## Usage
 
-Creating an agent to make requests...
+### Creating an agent to make requests...
 
 ```ts
 import { Agent } from '@intrnl/bluesky-client/agent';
 
-const agent = new Agent({ serviceUri: '...' });
+const agent = new Agent({ serviceUri: 'https://bsky.social' });
 
 await agent.login({
 	identifier: '...',
@@ -58,7 +58,7 @@ const profile = await agent.rpc.get('app.bsky.actor.getProfile', {
 console.log(profile);
 ```
 
-Fiddling with AT Proto schema...
+### Fiddling with AT Proto schema...
 
 ```ts
 import { type UnionOf } from '@intrnl/bluesky-client/atp-schema';
@@ -70,3 +70,6 @@ const mention: MentionFacet = {
 	did: 'did:plc:ragtjsm2j2vknwkz3zp4oxrd',
 };
 ```
+
+- `RefOf` types are used for referencing an object within another object or record.
+- `UnionOf` types are used in places where a field can contain multiple references, requiring a `$type` field to differentiate the reference.
