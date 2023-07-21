@@ -1,4 +1,4 @@
-// This handles the necessary functions for graphemes on RichText models,
+// This example provides the one necessary function for RichText graphemes,
 // we only need `graphemeLen` to count how many graphemes there are on a text.
 
 // We rely on Intl.Segmenter when available, only falling back to `graphemer`
