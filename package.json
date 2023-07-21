@@ -13,6 +13,7 @@
 		"dist",
 		"!dist/tsconfig.tsbuildinfo"
 	],
+	"sideEffects": false,
 	"exports": {
 		"./agent": {
 			"types": "./dist/agent.d.ts",
