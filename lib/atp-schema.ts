@@ -336,6 +336,7 @@ export interface Queries {
 		params: {
 			limit?: number;
 			cursor?: string;
+			query?: string;
 		};
 		response: {
 			cursor?: string;
@@ -393,6 +394,7 @@ export interface Queries {
 		params: {
 			subject?: string;
 			ignoreSubjects?: string[];
+			actionedBy?: DID;
 			reporters?: string[];
 			resolved?: boolean;
 			actionType?:
@@ -688,6 +690,16 @@ export interface Procedures {
 			createdBy: DID;
 		};
 		response: RefOf<'com.atproto.admin.defs#actionView'>;
+	};
+	'com.atproto.admin.sendEmail': {
+		data: {
+			recipientDid: DID;
+			content: string;
+			subject?: string;
+		};
+		response: {
+			sent: boolean;
+		};
 	};
 	'com.atproto.admin.takeModerationAction': {
 		data: {
