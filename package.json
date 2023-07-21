@@ -21,6 +21,14 @@
 		"./atp-schema": {
 			"types": "./dist/atp-schema.d.ts"
 		},
+		"./events": {
+			"types": "./dist/events.d.ts",
+			"import": "./dist/events.js"
+		},
+		"./jwt": {
+			"types": "./dist/jwt.d.ts",
+			"import": "./dist/jwt.js"
+		},
 		"./xrpc-utils": {
 			"types": "./dist/xrpc-utils.d.ts",
 			"import": "./dist/xrpc-utils.js"
