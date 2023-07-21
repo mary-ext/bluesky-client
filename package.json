@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "@intrnl/bluesky-client",
 	"description": "Lightweight API client for Bluesky/AT Protocol",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"author": "intrnl",
 	"license": "MIT",
 	"repository": {
