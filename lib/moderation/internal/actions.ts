@@ -1,19 +1,20 @@
 // https://github.com/bluesky-social/atproto/blob/7e060ea7746d64278c0c0f6c97c103bff7299bc2/packages/api/src/moderation/accumulator.ts#L113
 
-import type { RefOf } from '../../atp-schema.js';
+import type { DID, RefOf } from '../../atp-schema.js';
 
 import { LABELS } from '../constants/labels.js';
 
 import type {
 	Label,
 	LabelDefinitionPreference,
-	ModerationApplyOpts,
 	ModerationCause,
 	ModerationDecision,
+	ModerationOpts,
 } from '../types.js';
 
-export const createModerationDecision = (): ModerationDecision => {
+export const createModerationDecision = (did?: DID): ModerationDecision => {
 	return {
+		did: did,
 		cause: undefined,
 		alert: false,
 		blur: false,
@@ -25,21 +26,19 @@ export const createModerationDecision = (): ModerationDecision => {
 };
 
 interface ModerationAccumulator {
-	_canHide: boolean;
+	_did?: DID;
 	_causes: ModerationCause[];
 }
 
 export const createModerationAccumulator = (): ModerationAccumulator => {
 	return {
-		_canHide: true,
+		_did: undefined,
 		_causes: [],
 	};
 };
 
-export const setIsMe = (accu: ModerationAccumulator, me: boolean) => {
-	if (me) {
-		accu._canHide = false;
-	}
+export const setDid = (accu: ModerationAccumulator, did: DID) => {
+	accu._did = did;
 };
 
 export const addBlocking = (accu: ModerationAccumulator, blocking: string | undefined) => {
@@ -67,7 +66,7 @@ export const addMuted = (accu: ModerationAccumulator, muted: boolean | undefined
 		accu._causes.push({
 			type: 'muted',
 			source: { type: 'user' },
-			priority: 5,
+			priority: 6,
 		});
 	}
 };
@@ -80,12 +79,12 @@ export const addMutedByList = (
 		accu._causes.push({
 			type: 'muted',
 			source: { type: 'list', list: list },
-			priority: 5,
+			priority: 6,
 		});
 	}
 };
 
-export const addLabel = (accu: ModerationAccumulator, label: Label, opts: ModerationApplyOpts) => {
+export const addLabel = (accu: ModerationAccumulator, label: Label, opts: ModerationOpts) => {
 	// look up the label definition
 	const labelDef = LABELS[label.val];
 	if (!labelDef) {
@@ -115,22 +114,18 @@ export const addLabel = (accu: ModerationAccumulator, label: Label, opts: Modera
 		return;
 	}
 
-	// downgrade hide preferences if we can't hide
-	// (used when viewing your own content)
-	if (!accu._canHide && labelPref === 'hide') {
-		labelPref = 'warn';
-	}
-
 	// establish the priority of the label
-	let priority: 3 | 4 | 6 | 7;
-	if (labelPref === 'hide') {
+	let priority: 3 | 4 | 5 | 7 | 8;
+	if (labelDef.flags.includes('no-override')) {
 		priority = 3;
-	} else if (labelDef.onwarn === 'blur') {
+	} else if (labelPref === 'hide') {
 		priority = 4;
+	} else if (labelDef.onwarn === 'blur') {
+		priority = 5;
 	} else if (labelDef.onwarn === 'blur-media') {
-		priority = 6;
-	} else {
 		priority = 7;
+	} else {
+		priority = 8;
 	}
 
 	accu._causes.push({
@@ -143,11 +138,8 @@ export const addLabel = (accu: ModerationAccumulator, label: Label, opts: Modera
 	});
 };
 
-export const finalizeDecision = (
-	accu: ModerationAccumulator,
-	opts: ModerationApplyOpts,
-): ModerationDecision => {
-	const mod = createModerationDecision();
+export const finalizeDecision = (accu: ModerationAccumulator, opts: ModerationOpts): ModerationDecision => {
+	const mod = createModerationDecision(accu._did!);
 	if (!accu._causes.length) {
 		return mod;
 	}

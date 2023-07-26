@@ -1,4 +1,4 @@
-import type { RefOf } from '../atp-schema.js';
+import type { DID, RefOf } from '../atp-schema.js';
 
 // labels
 // =
@@ -85,17 +85,18 @@ export type ModerationCause =
 			label: Label;
 			labelDef: LabelDefinition;
 			setting: LabelDefinitionPreference;
-			priority: 3 | 4 | 6 | 7;
+			priority: 3 | 4 | 5 | 7 | 8;
 	  }
-	| { type: 'muted'; source: ModerationCauseSource; priority: 5 };
+	| { type: 'muted'; source: ModerationCauseSource; priority: 6 };
 
-export interface ModerationApplyOpts {
+export interface ModerationOpts {
 	userDid: string;
 	adultContentEnabled: boolean;
 	labelerSettings: LabelerSettings[];
 }
 
 export interface ModerationDecision {
+	did: DID | undefined;
 	cause: ModerationCause | undefined;
 	alert: boolean;
 	blur: boolean;

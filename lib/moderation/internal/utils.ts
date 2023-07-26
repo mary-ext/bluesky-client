@@ -25,7 +25,7 @@ export const mergeModerationDecisions = (...decisions: ModerationDecision[]): Mo
 		}
 
 		if (b.cause) {
-			return -1;
+			return 1;
 		}
 
 		return 0;
@@ -33,6 +33,37 @@ export const mergeModerationDecisions = (...decisions: ModerationDecision[]): Mo
 
 	// use the top priority
 	return decisions[0];
+};
+
+export const downgradeDecision = (decision: ModerationDecision, { alert }: { alert: boolean }) => {
+	decision.blur = false;
+	decision.blurMedia = false;
+	decision.filter = false;
+	decision.noOverride = false;
+	decision.alert = alert;
+};
+
+export const isModerationDecisionNoop = (
+	decision: ModerationDecision | undefined,
+	opts?: { ignoreFilter: boolean },
+): boolean => {
+	if (!decision) {
+		return true;
+	}
+
+	if (decision.alert) {
+		return false;
+	}
+
+	if (decision.blur) {
+		return false;
+	}
+
+	if (decision.filter && !opts?.ignoreFilter) {
+		return false;
+	}
+
+	return true;
 };
 
 export const isQuotedPost = (embed: PostEmbed): embed is PostEmbedRecord => {

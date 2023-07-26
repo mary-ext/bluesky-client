@@ -1,14 +1,14 @@
 import * as Accumulator from '../internal/actions.js';
 
-import type { Label, ModerationSubjectProfile, ModerationApplyOpts, ModerationDecision } from '../types.js';
+import type { Label, ModerationDecision, ModerationOpts, ModerationSubjectProfile } from '../types.js';
 
 export const decideProfile = (
 	subject: ModerationSubjectProfile,
-	opts: ModerationApplyOpts,
+	opts: ModerationOpts,
 ): ModerationDecision => {
 	const accu = Accumulator.createModerationAccumulator();
 
-	Accumulator.setIsMe(accu, subject.did === opts.userDid);
+	Accumulator.setDid(accu, subject.did);
 
 	for (const label of filterProfileLabels(subject.labels)) {
 		Accumulator.addLabel(accu, label, opts);

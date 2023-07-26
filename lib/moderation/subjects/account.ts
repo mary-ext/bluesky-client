@@ -1,15 +1,15 @@
 import * as Accumulator from '../internal/actions.js';
 
-import type { Label, ModerationSubjectProfile, ModerationApplyOpts, ModerationDecision } from '../types.js';
+import type { Label, ModerationDecision, ModerationOpts, ModerationSubjectProfile } from '../types.js';
 
 export const decideAccount = (
 	subject: ModerationSubjectProfile,
-	opts: ModerationApplyOpts,
+	opts: ModerationOpts,
 ): ModerationDecision => {
 	const accu = Accumulator.createModerationAccumulator();
 	const viewer = subject.viewer;
 
-	Accumulator.setIsMe(accu, subject.did === opts.userDid);
+	Accumulator.setDid(accu, subject.did);
 	Accumulator.addMuted(accu, viewer?.muted);
 	Accumulator.addMutedByList(accu, viewer?.mutedByList);
 	Accumulator.addBlocking(accu, viewer?.blocking);

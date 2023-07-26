@@ -1,11 +1,11 @@
 import * as Accumulator from '../internal/actions.js';
 
-import type { ModerationSubjectPost, ModerationApplyOpts, ModerationDecision } from '../types.js';
+import type { ModerationDecision, ModerationOpts, ModerationSubjectPost } from '../types.js';
 
-export const decidePost = (subject: ModerationSubjectPost, opts: ModerationApplyOpts): ModerationDecision => {
+export const decidePost = (subject: ModerationSubjectPost, opts: ModerationOpts): ModerationDecision => {
 	const accu = Accumulator.createModerationAccumulator();
 
-	Accumulator.setIsMe(accu, subject.author.did === opts.userDid);
+	Accumulator.setDid(accu, subject.author.did);
 
 	if (subject.labels?.length) {
 		for (const label of subject.labels) {

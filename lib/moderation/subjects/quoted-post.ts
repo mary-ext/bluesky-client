@@ -1,14 +1,14 @@
 import * as Accumulator from '../internal/actions.js';
-import { assert, type PostEmbedRecord, type PostEmbedRecordWithMedia } from '../internal/utils.js';
+import { type PostEmbedRecord, type PostEmbedRecordWithMedia, assert } from '../internal/utils.js';
 
-import type { ModerationApplyOpts, ModerationDecision } from '../types.js';
+import type { ModerationDecision, ModerationOpts } from '../types.js';
 
 import { decideAccount } from './account.js';
 
 // `isQuotedPost` and `isQuotedPostWithMedia` already checked the types for the
 // record, there isn't any need to do that again here.
 
-export const decideQuotedPost = (subject: PostEmbedRecord, opts: ModerationApplyOpts): ModerationDecision => {
+export const decideQuotedPost = (subject: PostEmbedRecord, opts: ModerationOpts): ModerationDecision => {
 	const accu = Accumulator.createModerationAccumulator();
 	const record = subject.record;
 
@@ -16,7 +16,7 @@ export const decideQuotedPost = (subject: PostEmbedRecord, opts: ModerationApply
 
 	const labels = record.labels;
 
-	Accumulator.setIsMe(accu, record.author.did === opts.userDid);
+	Accumulator.setDid(accu, record.author.did);
 
 	if (labels?.length) {
 		for (const label of labels) {
@@ -29,7 +29,7 @@ export const decideQuotedPost = (subject: PostEmbedRecord, opts: ModerationApply
 
 export const decideQuotedPostAccount = (
 	subject: PostEmbedRecord,
-	opts: ModerationApplyOpts,
+	opts: ModerationOpts,
 ): ModerationDecision => {
 	dev: assert(subject.record.$type === 'app.bsky.embed.record#viewRecord');
 
@@ -38,7 +38,7 @@ export const decideQuotedPostAccount = (
 
 export const decideQuotedPostWithMedia = (
 	subject: PostEmbedRecordWithMedia,
-	opts: ModerationApplyOpts,
+	opts: ModerationOpts,
 ): ModerationDecision => {
 	const accu = Accumulator.createModerationAccumulator();
 	const record = subject.record.record;
@@ -47,7 +47,7 @@ export const decideQuotedPostWithMedia = (
 
 	const labels = record.labels;
 
-	Accumulator.setIsMe(accu, record.author.did === opts.userDid);
+	Accumulator.setDid(accu, record.author.did);
 
 	if (labels?.length) {
 		for (const label of labels) {
@@ -60,7 +60,7 @@ export const decideQuotedPostWithMedia = (
 
 export const decideQuotedPostWithMediaAccount = (
 	subject: PostEmbedRecordWithMedia,
-	opts: ModerationApplyOpts,
+	opts: ModerationOpts,
 ): ModerationDecision => {
 	dev: assert(subject.record.record.$type === 'app.bsky.embed.record#viewRecord');
 
