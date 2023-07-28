@@ -46,7 +46,7 @@ export const addBlocking = (accu: ModerationAccumulator, blocking: string | unde
 		accu._causes.push({
 			type: 'blocking',
 			source: { type: 'user' },
-			priority: 1,
+			priority: 3,
 		});
 	}
 };
@@ -56,7 +56,7 @@ export const addBlockedBy = (accu: ModerationAccumulator, blockedBy: boolean | u
 		accu._causes.push({
 			type: 'blocked-by',
 			source: { type: 'user' },
-			priority: 2,
+			priority: 4,
 		});
 	}
 };
@@ -115,11 +115,11 @@ export const addLabel = (accu: ModerationAccumulator, label: Label, opts: Modera
 	}
 
 	// establish the priority of the label
-	let priority: 3 | 4 | 5 | 7 | 8;
+	let priority: 1 | 2 | 5 | 7 | 8
 	if (labelDef.flags.includes('no-override')) {
-		priority = 3;
+		priority = 1
 	} else if (labelPref === 'hide') {
-		priority = 4;
+		priority = 2
 	} else if (labelDef.onwarn === 'blur') {
 		priority = 5;
 	} else if (labelDef.onwarn === 'blur-media') {

@@ -77,15 +77,15 @@ export type ModerationCauseSource =
 	| { type: 'list'; list: RefOf<'app.bsky.graph.defs#listViewBasic'> };
 
 export type ModerationCause =
-	| { type: 'blocking'; source: ModerationCauseSource; priority: 1 }
-	| { type: 'blocked-by'; source: ModerationCauseSource; priority: 2 }
+	| { type: 'blocking'; source: ModerationCauseSource; priority: 3 }
+	| { type: 'blocked-by'; source: ModerationCauseSource; priority: 4 }
 	| {
 			type: 'label';
 			labeler: Labeler;
 			label: Label;
 			labelDef: LabelDefinition;
 			setting: LabelDefinitionPreference;
-			priority: 3 | 4 | 5 | 7 | 8;
+			priority: 1 | 2 | 5 | 7 | 8;
 	  }
 	| { type: 'muted'; source: ModerationCauseSource; priority: 6 };
 

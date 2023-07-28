@@ -71,16 +71,25 @@ export const moderateProfile = (
 	}
 
 	// derive avatar blurring from account & profile, but override for mutes because that shouldnt blur
-	let blurAvatar = false;
+	// derive avatar blurring from account & profile, but override for mutes because that shouldnt blur
+	let avatarBlur = false;
+	let avatarNoOverride = false;
 	if ((account.blur || account.blurMedia) && account.cause?.type !== 'muted') {
-		blurAvatar = true;
+		avatarBlur = true;
+		avatarNoOverride = account.noOverride || profile.noOverride;
 	} else if (profile.blur || profile.blurMedia) {
-		blurAvatar = true;
+		avatarBlur = true;
+		avatarNoOverride = account.noOverride || profile.noOverride;
 	}
 
-	// dont blur the account for muting
-	if (account.cause?.type === 'muted') {
+	// dont blur the account for blocking & muting
+	if (
+		account.cause?.type === 'blocking' ||
+		account.cause?.type === 'blocked-by' ||
+		account.cause?.type === 'muted'
+	) {
 		account.blur = false;
+		account.noOverride = false;
 	}
 
 	return {
@@ -94,9 +103,9 @@ export const moderateProfile = (
 
 		// blur or alert the avatar based on the account and profile decisions
 		avatar: {
-			blur: blurAvatar,
+			blur: avatarBlur,
 			alert: account.alert || profile.alert,
-			noOverride: account.noOverride || profile.noOverride,
+			noOverride: avatarNoOverride,
 		},
 	};
 };
