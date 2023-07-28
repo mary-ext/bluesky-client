@@ -1,6 +1,7 @@
 import type { RefOf, UnionOf } from '../../atp-schema.js';
 
-import type { ModerationDecision } from '../types.js';
+import type { ModerationDecision, ModerationUI } from '../types.js';
+import { createModerationDecision } from './actions.js';
 
 type PostEmbed = RefOf<'app.bsky.feed.defs#postView'>['embed'];
 
@@ -13,26 +14,32 @@ export function assert(condition: any): asserts condition {
 	}
 }
 
-export const mergeModerationDecisions = (...decisions: ModerationDecision[]): ModerationDecision => {
+export const takeHighestPriorityDecision = (
+	...decisions: (ModerationDecision | undefined)[]
+): ModerationDecision => {
+	// remove undefined decisions
+	const filtered = decisions.filter((d) => !!d) as ModerationDecision[];
+
+	if (filtered.length === 0) {
+		return createModerationDecision();
+	}
+
 	// sort by highest priority
-	decisions.sort((a, b) => {
+	filtered.sort((a, b) => {
 		if (a.cause && b.cause) {
 			return a.cause.priority - b.cause.priority;
 		}
-
 		if (a.cause) {
 			return -1;
 		}
-
 		if (b.cause) {
 			return 1;
 		}
-
 		return 0;
 	});
 
 	// use the top priority
-	return decisions[0];
+	return filtered[0];
 };
 
 export const downgradeDecision = (decision: ModerationDecision, { alert }: { alert: boolean }) => {
@@ -64,6 +71,16 @@ export const isModerationDecisionNoop = (
 	}
 
 	return true;
+};
+
+export const toModerationUI = (decision: ModerationDecision): ModerationUI => {
+	return {
+		cause: decision.cause,
+		filter: decision.filter,
+		blur: decision.blur,
+		alert: decision.alert,
+		noOverride: decision.noOverride,
+	};
 };
 
 export const isQuotedPost = (embed: PostEmbed): embed is PostEmbedRecord => {

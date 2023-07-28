@@ -25,7 +25,8 @@ import {
 	isModerationDecisionNoop,
 	isQuotedPost,
 	isQuotedPostWithMedia,
-	mergeModerationDecisions,
+	takeHighestPriorityDecision,
+	toModerationUI,
 } from './internal/utils.js';
 
 import { createModerationDecision } from './internal/actions.js';
@@ -38,7 +39,8 @@ export interface ProfileModeration {
 		account: ModerationDecision;
 		profile: ModerationDecision;
 	};
-	content: ModerationUI;
+	account: ModerationUI;
+	profile: ModerationUI;
 	avatar: ModerationUI;
 }
 
@@ -50,25 +52,50 @@ export const moderateProfile = (
 	const account = decideAccount(subject, opts);
 	const profile = decideProfile(subject, opts);
 
-	// derive behaviors from both
-	const merged = mergeModerationDecisions(profile, account);
+	// if the decision is supposed to blur media,
+	// - have it apply to the view if it's on the account
+	// - otherwise ignore it
+	if (account.blurMedia) {
+		account.blur = true;
+	}
+
+	// dont give profile.filter because that is meaningless
+	profile.filter = false;
+
+	// downgrade based on authorship
+	if (!isModerationDecisionNoop(account) && account.did === opts.userDid) {
+		downgradeDecision(account, { alert: true });
+	}
+	if (!isModerationDecisionNoop(profile) && profile.did === opts.userDid) {
+		downgradeDecision(profile, { alert: true });
+	}
+
+	// derive avatar blurring from account & profile, but override for mutes because that shouldnt blur
+	let blurAvatar = false;
+	if ((account.blur || account.blurMedia) && account.cause?.type !== 'muted') {
+		blurAvatar = true;
+	} else if (profile.blur || profile.blurMedia) {
+		blurAvatar = true;
+	}
+
+	// dont blur the account for muting
+	if (account.cause?.type === 'muted') {
+		account.blur = false;
+	}
 
 	return {
 		decisions: { account, profile },
 
-		// content behaviors are pulled from merged decisions
-		content: {
-			filter: merged.filter,
-			blur: merged.blur,
-			alert: merged.alert,
-			cause: merged.cause,
-			noOverride: merged.noOverride,
-		},
+		// moderate all content based on account
+		account: account.filter || account.blur || account.alert ? toModerationUI(account) : {},
+
+		// moderate the profile details based on the profile
+		profile: profile.filter || profile.blur || profile.alert ? toModerationUI(profile) : {},
 
 		// blur or alert the avatar based on the account and profile decisions
 		avatar: {
-			blur: account.blurMedia || profile.blurMedia,
-			alert: account.alert,
+			blur: blurAvatar,
+			alert: account.alert || profile.alert,
 			noOverride: account.noOverride || profile.noOverride,
 		},
 	};
@@ -106,8 +133,6 @@ export const moderatePost = (subject: ModerationSubjectPost, opts: ModerationOpt
 	} else if (isQuotedPostWithMedia(subject.embed)) {
 		quote = decideQuotedPostWithMedia(subject.embed, opts);
 		quotedAccount = decideQuotedPostWithMediaAccount(subject.embed, opts);
-	} else {
-		dev: throw new Error(`we shouldn't be here`);
 	}
 
 	// downgrade based on authorship
@@ -129,13 +154,13 @@ export const moderatePost = (subject: ModerationSubjectPost, opts: ModerationOpt
 
 	// derive filtering from feeds from the post, post author's account,
 	// quoted post, and quoted post author's account
-	const mergedForFeed = mergeModerationDecisions(post, account, quote, quotedAccount);
+	const mergedForFeed = takeHighestPriorityDecision(post, account, quote, quotedAccount);
 
 	// derive view blurring from the post and the post author's account
-	const mergedForView = mergeModerationDecisions(post, account);
+	const mergedForView = takeHighestPriorityDecision(post, account);
 
 	// derive embed blurring from the quoted post and the quoted post author's account
-	const mergedQuote = mergeModerationDecisions(quote, quotedAccount);
+	const mergedQuote = takeHighestPriorityDecision(quote, quotedAccount);
 
 	// derive avatar blurring from account & profile, but override for mutes because that shouldnt blur
 	let blurAvatar = false;
@@ -169,13 +194,19 @@ export const moderatePost = (subject: ModerationSubjectPost, opts: ModerationOpt
 		},
 
 		// blur the embed if the quoted post required it,
-		// or else if the post decision was to blur media
+		// or else if the account or post decision was to blur media
 		embed: !isModerationDecisionNoop(mergedQuote, { ignoreFilter: true })
 			? {
 					cause: mergedQuote.cause,
 					blur: mergedQuote.blur,
 					alert: mergedQuote.alert,
 					noOverride: mergedQuote.noOverride,
+			  }
+			: account.blurMedia
+			? {
+					cause: account.cause,
+					blur: true,
+					noOverride: account.noOverride,
 			  }
 			: post.blurMedia
 			? {
@@ -211,7 +242,7 @@ export const moderateFeedGenerator = (
 	const profile = decideProfile(subject.creator, opts);
 
 	// derive behaviors from feeds from the generator and the generator's account
-	const merged = mergeModerationDecisions(feedGenerator, account);
+	const merged = takeHighestPriorityDecision(feedGenerator, account);
 
 	return {
 		decisions: { feedGenerator, account, profile },
@@ -261,7 +292,7 @@ export const moderateUserList = (
 	const profile = hasCreator ? decideProfile(subject.creator, opts) : createModerationDecision();
 
 	// derive behaviors from feeds from the list and the list's account
-	const merged = mergeModerationDecisions(userList, account);
+	const merged = takeHighestPriorityDecision(userList, account);
 
 	return {
 		decisions: { userList, account, profile },

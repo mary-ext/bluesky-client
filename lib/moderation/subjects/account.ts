@@ -10,8 +10,15 @@ export const decideAccount = (
 	const viewer = subject.viewer;
 
 	Accumulator.setDid(accu, subject.did);
-	Accumulator.addMuted(accu, viewer?.muted);
-	Accumulator.addMutedByList(accu, viewer?.mutedByList);
+
+	if (subject.viewer?.muted) {
+		if (subject.viewer?.mutedByList) {
+			Accumulator.addMutedByList(accu, subject.viewer?.mutedByList);
+		} else {
+			Accumulator.addMuted(accu, subject.viewer?.muted);
+		}
+	}
+
 	Accumulator.addBlocking(accu, viewer?.blocking);
 	Accumulator.addBlockedBy(accu, viewer?.blockedBy);
 
