@@ -6,7 +6,7 @@ import { LABELS } from '../constants/labels.js';
 
 import type {
 	Label,
-	LabelDefinitionPreference,
+	LabelPreference,
 	ModerationCause,
 	ModerationDecision,
 	ModerationOpts,
@@ -100,7 +100,7 @@ export const addLabel = (accu: ModerationAccumulator, label: Label, opts: Modera
 	}
 
 	// establish the label preference for interpretation
-	let labelPref: LabelDefinitionPreference = 'ignore';
+	let labelPref: LabelPreference = 'ignore';
 	if (!labelDef.configurable) {
 		labelPref = labelDef.preferences[0];
 	} else if (labelDef.flags.includes('adult') && !opts.adultContentEnabled) {
