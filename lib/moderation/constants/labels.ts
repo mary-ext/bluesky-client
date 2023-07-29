@@ -112,7 +112,7 @@ export const LABELS: LabelDefinitionMap = {
 		id: 'self-harm',
 		preferences: ['ignore', 'warn', 'hide'],
 		flags: ['adult'],
-		onwarn: 'blur',
+		onwarn: 'blur-media',
 		groupId: 'violence',
 		configurable: true,
 	},
