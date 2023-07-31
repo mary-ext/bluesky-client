@@ -15,6 +15,7 @@ export class XRPCError extends Error {
 
 	constructor(public status: ResponseType, public error?: string, message?: string) {
 		super(message || error);
+		this.name = 'XRPCError';
 	}
 }
 
