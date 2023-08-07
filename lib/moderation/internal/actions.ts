@@ -115,11 +115,11 @@ export const addLabel = (accu: ModerationAccumulator, label: Label, opts: Modera
 	}
 
 	// establish the priority of the label
-	let priority: 1 | 2 | 5 | 7 | 8
+	let priority: 1 | 2 | 5 | 7 | 8;
 	if (labelDef.flags.includes('no-override')) {
-		priority = 1
+		priority = 1;
 	} else if (labelPref === 'hide') {
-		priority = 2
+		priority = 2;
 	} else if (labelDef.onwarn === 'blur') {
 		priority = 5;
 	} else if (labelDef.onwarn === 'blur-media') {
