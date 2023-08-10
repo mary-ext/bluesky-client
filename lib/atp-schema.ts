@@ -106,6 +106,7 @@ export interface Queries {
 			actor: string;
 			limit?: number;
 			cursor?: string;
+			filter?: 'posts_with_replies' | 'posts_no_replies' | 'posts_with_media' | (string & {});
 		};
 		response: {
 			cursor?: string;
@@ -649,9 +650,15 @@ export interface Procedures {
 			seenAt: string;
 		};
 	};
+	'app.bsky.unspecced.applyLabels': {
+		data: {
+			labels: RefOf<'com.atproto.label.defs#label'>[];
+		};
+	};
 	'com.atproto.admin.disableAccountInvites': {
 		data: {
 			account: DID;
+			note?: string;
 		};
 	};
 	'com.atproto.admin.disableInviteCodes': {
@@ -663,6 +670,7 @@ export interface Procedures {
 	'com.atproto.admin.enableAccountInvites': {
 		data: {
 			account: DID;
+			note?: string;
 		};
 	};
 	'com.atproto.admin.rebaseRepo': {
@@ -1324,6 +1332,7 @@ export interface Objects {
 		moderation: RefOf<'com.atproto.admin.defs#moderation'>;
 		invitedBy?: RefOf<'com.atproto.server.defs#inviteCode'>;
 		invitesDisabled?: boolean;
+		inviteNote?: string;
 	};
 	'com.atproto.admin.defs#repoViewDetail': {
 		did: DID;
@@ -1336,6 +1345,7 @@ export interface Objects {
 		invitedBy?: RefOf<'com.atproto.server.defs#inviteCode'>;
 		invites?: RefOf<'com.atproto.server.defs#inviteCode'>[];
 		invitesDisabled?: boolean;
+		inviteNote?: string;
 	};
 	'com.atproto.admin.defs#repoViewNotFound': {
 		did: DID;
@@ -1397,6 +1407,12 @@ export interface Objects {
 		val: string;
 		neg?: boolean;
 		cts: string;
+	};
+	'com.atproto.label.defs#selfLabels': {
+		values: RefOf<'com.atproto.label.defs#selfLabel'>[];
+	};
+	'com.atproto.label.defs#selfLabel': {
+		val: string;
 	};
 	'com.atproto.label.subscribeLabels#labels': {
 		seq: number;
@@ -1523,6 +1539,7 @@ export interface Records {
 		description?: string;
 		avatar?: AtBlob<`image/png` | `image/jpeg`>;
 		banner?: AtBlob<`image/png` | `image/jpeg`>;
+		labels?: UnionOf<'com.atproto.label.defs#selfLabels'>;
 	};
 	'app.bsky.feed.generator': {
 		did: DID;
@@ -1530,6 +1547,7 @@ export interface Records {
 		description?: string;
 		descriptionFacets?: RefOf<'app.bsky.richtext.facet'>[];
 		avatar?: AtBlob<`image/png` | `image/jpeg`>;
+		labels?: UnionOf<'com.atproto.label.defs#selfLabels'>;
 		createdAt: string;
 	};
 	'app.bsky.feed.like': {
@@ -1547,6 +1565,7 @@ export interface Records {
 			| UnionOf<'app.bsky.embed.record'>
 			| UnionOf<'app.bsky.embed.recordWithMedia'>;
 		langs?: string[];
+		labels?: UnionOf<'com.atproto.label.defs#selfLabels'>;
 		createdAt: string;
 	};
 	'app.bsky.feed.repost': {
@@ -1567,6 +1586,7 @@ export interface Records {
 		description?: string;
 		descriptionFacets?: RefOf<'app.bsky.richtext.facet'>[];
 		avatar?: AtBlob<`image/png` | `image/jpeg`>;
+		labels?: UnionOf<'com.atproto.label.defs#selfLabels'>;
 		createdAt: string;
 	};
 	'app.bsky.graph.listitem': {
