@@ -8,7 +8,6 @@
 	"repository": {
 		"url": "https://codeberg.org/intrnl/bluesky-client"
 	},
-	"packageManager": "pnpm@8.6.5",
 	"files": [
 		"dist",
 		"!dist/tsconfig.tsbuildinfo"
