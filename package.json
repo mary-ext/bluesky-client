@@ -45,7 +45,7 @@
 	"scripts": {
 		"build:lib": "node ./scripts/mkdist.js",
 		"build:schema": "node ./scripts/generate-atp-schema.js",
-		"prepublishOnly": "pnpm run build:schema && pnpm tsc && pnpm run build:lib",
+		"prepublishOnly": "npm run build:schema && tsc && npm run build:lib",
 		"fmt": "prettier --cache --write ."
 	},
 	"devDependencies": {
