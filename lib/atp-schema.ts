@@ -1082,9 +1082,12 @@ export interface Objects {
 	};
 	'app.bsky.embed.record#viewNotFound': {
 		uri: AtUri;
+		notFound: boolean;
 	};
 	'app.bsky.embed.record#viewBlocked': {
 		uri: AtUri;
+		blocked: boolean;
+		author: RefOf<'app.bsky.feed.defs#blockedAuthor'>;
 	};
 	'app.bsky.embed.recordWithMedia': {
 		record: RefOf<'app.bsky.embed.record'>;
@@ -1153,6 +1156,11 @@ export interface Objects {
 	'app.bsky.feed.defs#blockedPost': {
 		uri: AtUri;
 		blocked: boolean;
+		author: RefOf<'app.bsky.feed.defs#blockedAuthor'>;
+	};
+	'app.bsky.feed.defs#blockedAuthor': {
+		did: DID;
+		viewer?: RefOf<'app.bsky.actor.defs#viewerState'>;
 	};
 	'app.bsky.feed.defs#generatorView': {
 		uri: AtUri;
