@@ -23,10 +23,23 @@
 							"type": "union",
 							"refs": ["com.atproto.admin.defs#repoRef", "com.atproto.repo.strongRef"]
 						},
-						"subjectBlobCids": { "type": "array", "items": { "type": "string", "format": "cid" } },
-						"createLabelVals": { "type": "array", "items": { "type": "string" } },
-						"negateLabelVals": { "type": "array", "items": { "type": "string" } },
+						"subjectBlobCids": {
+							"type": "array",
+							"items": { "type": "string", "format": "cid" }
+						},
+						"createLabelVals": {
+							"type": "array",
+							"items": { "type": "string" }
+						},
+						"negateLabelVals": {
+							"type": "array",
+							"items": { "type": "string" }
+						},
 						"reason": { "type": "string" },
+						"durationInHours": {
+							"type": "integer",
+							"description": "Indicates how long this action was meant to be in effect before automatically expiring."
+						},
 						"createdBy": { "type": "string", "format": "did" }
 					}
 				}

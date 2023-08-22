@@ -101,6 +101,21 @@ export interface Queries {
 			feeds: RefOf<'app.bsky.feed.defs#generatorView'>[];
 		};
 	};
+	'app.bsky.feed.getActorLikes': {
+		params: {
+			actor: string;
+			limit?: number;
+			cursor?: string;
+		};
+		response: {
+			cursor?: string;
+			feed: RefOf<'app.bsky.feed.defs#feedViewPost'>[];
+		};
+		errors: {
+			BlockedActor: {};
+			BlockedByActor: {};
+		};
+	};
 	'app.bsky.feed.getAuthorFeed': {
 		params: {
 			actor: string;
@@ -721,6 +736,7 @@ export interface Procedures {
 			createLabelVals?: string[];
 			negateLabelVals?: string[];
 			reason: string;
+			durationInHours?: number;
 			createdBy: DID;
 		};
 		response: RefOf<'com.atproto.admin.defs#actionView'>;
@@ -1267,6 +1283,7 @@ export interface Objects {
 	'com.atproto.admin.defs#actionView': {
 		id: number;
 		action: RefOf<'com.atproto.admin.defs#actionType'>;
+		durationInHours?: number;
 		subject: UnionOf<'com.atproto.admin.defs#repoRef'> | UnionOf<'com.atproto.repo.strongRef'>;
 		subjectBlobCids: string[];
 		createLabelVals?: string[];
@@ -1280,6 +1297,7 @@ export interface Objects {
 	'com.atproto.admin.defs#actionViewDetail': {
 		id: number;
 		action: RefOf<'com.atproto.admin.defs#actionType'>;
+		durationInHours?: number;
 		subject:
 			| UnionOf<'com.atproto.admin.defs#repoView'>
 			| UnionOf<'com.atproto.admin.defs#repoViewNotFound'>
@@ -1297,6 +1315,7 @@ export interface Objects {
 	'com.atproto.admin.defs#actionViewCurrent': {
 		id: number;
 		action: RefOf<'com.atproto.admin.defs#actionType'>;
+		durationInHours?: number;
 	};
 	'com.atproto.admin.defs#actionReversal': {
 		reason: string;
