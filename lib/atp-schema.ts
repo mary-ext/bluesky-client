@@ -660,6 +660,14 @@ export interface Procedures {
 			list: AtUri;
 		};
 	};
+	'app.bsky.notification.registerPush': {
+		data: {
+			serviceDid: DID;
+			token: string;
+			platform: 'ios' | 'android' | 'web' | (string & {});
+			appId: string;
+		};
+	};
 	'app.bsky.notification.updateSeen': {
 		data: {
 			seenAt: string;
