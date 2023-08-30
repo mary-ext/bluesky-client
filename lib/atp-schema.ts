@@ -570,19 +570,8 @@ export interface Queries {
 	'com.atproto.sync.getCheckout': {
 		params: {
 			did: DID;
-			commit?: CID;
 		};
 		response: unknown;
-	};
-	'com.atproto.sync.getCommitPath': {
-		params: {
-			did: DID;
-			latest?: CID;
-			earliest?: CID;
-		};
-		response: {
-			commits: CID[];
-		};
 	};
 	'com.atproto.sync.getHead': {
 		params: {
@@ -593,6 +582,18 @@ export interface Queries {
 		};
 		errors: {
 			HeadNotFound: {};
+		};
+	};
+	'com.atproto.sync.getLatestCommit': {
+		params: {
+			did: DID;
+		};
+		response: {
+			cid: CID;
+			rev: string;
+		};
+		errors: {
+			RepoNotFound: {};
 		};
 	};
 	'com.atproto.sync.getRecord': {
@@ -607,18 +608,19 @@ export interface Queries {
 	'com.atproto.sync.getRepo': {
 		params: {
 			did: DID;
-			earliest?: CID;
-			latest?: CID;
+			since?: CID;
 		};
 		response: unknown;
 	};
 	'com.atproto.sync.listBlobs': {
 		params: {
 			did: DID;
-			latest?: CID;
-			earliest?: CID;
+			since?: CID;
+			limit?: number;
+			cursor?: string;
 		};
 		response: {
+			cursor?: string;
 			cids: CID[];
 		};
 	};
@@ -694,16 +696,6 @@ export interface Procedures {
 		data: {
 			account: DID;
 			note?: string;
-		};
-	};
-	'com.atproto.admin.rebaseRepo': {
-		data: {
-			repo: string;
-			swapCommit?: CID;
-		};
-		errors: {
-			InvalidSwap: {};
-			ConcurrentWrites: {};
 		};
 	};
 	'com.atproto.admin.resolveModerationReports': {
@@ -846,16 +838,6 @@ export interface Procedures {
 			InvalidSwap: {};
 		};
 	};
-	'com.atproto.repo.rebaseRepo': {
-		data: {
-			repo: string;
-			swapCommit?: CID;
-		};
-		errors: {
-			InvalidSwap: {};
-			ConcurrentWrites: {};
-		};
-	};
 	'com.atproto.repo.uploadBlob': {
 		data: Blob;
 		response: {
@@ -983,6 +965,11 @@ export interface Procedures {
 	'com.atproto.sync.requestCrawl': {
 		data: {
 			hostname: string;
+		};
+	};
+	'com.atproto.temp.upgradeRepoVersion': {
+		data: {
+			did: DID;
 		};
 	};
 }
@@ -1534,7 +1521,9 @@ export interface Objects {
 		tooBig: boolean;
 		repo: DID;
 		commit: unknown;
-		prev: unknown;
+		prev?: unknown;
+		rev: string;
+		since: string;
 		blocks: unknown;
 		ops: RefOf<'com.atproto.sync.subscribeRepos#repoOp'>[];
 		blobs: unknown[];
