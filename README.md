@@ -58,7 +58,7 @@ const profile = await agent.rpc.get('app.bsky.actor.getProfile', {
 console.log(profile);
 ```
 
-### Fiddling with AT Proto schema...
+### Fiddling with AT Protocol schema...
 
 ```ts
 import { type RefOf, type UnionOf } from '@intrnl/bluesky-client/atp-schema';
@@ -82,3 +82,5 @@ const facet: Facet = {
 
 - `RefOf` types are used for referencing an object within another object or record.
 - `UnionOf` types are used in places where a field can contain multiple references, requiring a `$type` field to differentiate the reference.
+- `ResponseOf` can be used to retrieve the response data out of a given endpoint.
+- `Records` interface contains the interface declarations for actual records.
