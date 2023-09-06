@@ -63,4 +63,6 @@ const rt = new RichTextBuilder()
 	.link('website', 'https://example.com')
 	.build();
 
-console.log(rt);
+console.log(rt.text); // "hello, @user! please visit my website"
+console.log(rt.length); // 37
+console.log(rt.facets); // [{ index: { byteStart: 7, byteEnd: 12 }, ... }
