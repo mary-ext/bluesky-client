@@ -1,5 +1,10 @@
 // This example demonstrates a builder for creating Bluesky's rich texts.
 
+// We import `graphemeLen` here so you can get the actual "length" of the text
+// so you can avoid reaching the limits, but if you're only dealing with ASCII
+// text, this can be avoided, along with the need to encode into UTF-8 to get
+// the indices for facets.
+
 import { DID, RefOf } from '../lib/atp-schema.js';
 
 import { graphemeLen } from './richtext-grapheme.js';
