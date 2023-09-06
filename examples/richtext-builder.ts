@@ -36,8 +36,7 @@ class RichTextBuilder {
 
 	feature(substr: string, feature: FacetFeature) {
 		const start = this.buffer.length;
-		this.text(substr);
-		const end = this.buffer.length;
+		const end = this.text(substr).buffer.length;
 
 		this.facets.push({
 			index: { byteStart: start, byteEnd: end },
