@@ -230,6 +230,16 @@ export interface Queries {
 			repostedBy: RefOf<'app.bsky.actor.defs#profileView'>[];
 		};
 	};
+	'app.bsky.feed.getSuggestedFeeds': {
+		params: {
+			limit?: number;
+			cursor?: string;
+		};
+		response: {
+			cursor?: string;
+			feeds: RefOf<'app.bsky.feed.defs#generatorView'>[];
+		};
+	};
 	'app.bsky.feed.getTimeline': {
 		params: {
 			algorithm?: string;
@@ -970,6 +980,7 @@ export interface Procedures {
 	'com.atproto.temp.upgradeRepoVersion': {
 		data: {
 			did: DID;
+			force?: boolean;
 		};
 	};
 }
