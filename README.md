@@ -32,8 +32,8 @@ The points above leads to `@intrnl/bluesky-client`, where the following tradeoff
   });
   ```
 
-- No RichText class for handling texts with facets, examples as to how you can
-  deal with RichText are available on the `examples/` folder.
+- No RichText class for handling texts with facets, examples as to how you can deal with RichText are available on the `examples/` folder.
+- No Moderation API for taking actions based on certain labels or status, this should be very trivial so long as you [follow the official documentations regarding the labels and how it deals with them](https://github.com/bluesky-social/atproto/blob/main/packages/api/docs/labels.md).
 
 ## Usage
 
