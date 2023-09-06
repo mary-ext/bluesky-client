@@ -61,13 +61,22 @@ console.log(profile);
 ### Fiddling with AT Proto schema...
 
 ```ts
-import { type UnionOf } from '@intrnl/bluesky-client/atp-schema';
+import { type RefOf, type UnionOf } from '@intrnl/bluesky-client/atp-schema';
 
+type Facet = RefOf<'app.bsky.richtext.facet'>;
 type MentionFacet = UnionOf<'app.bsky.richtext.facet#mention'>;
 
 const mention: MentionFacet = {
 	$type: 'app.bsky.richtext.facet#mention',
 	did: 'did:plc:ragtjsm2j2vknwkz3zp4oxrd',
+};
+
+const facet: Facet = {
+	index: {
+		byteStart: 7,
+		byteEnd: 12,
+	},
+	features: [mention],
 };
 ```
 
