@@ -10,7 +10,12 @@
 				"required": ["list"],
 				"properties": {
 					"list": { "type": "string", "format": "at-uri" },
-					"limit": { "type": "integer", "minimum": 1, "maximum": 100, "default": 50 },
+					"limit": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 100,
+						"default": 50
+					},
 					"cursor": { "type": "string" }
 				}
 			},
@@ -24,7 +29,10 @@
 						"list": { "type": "ref", "ref": "app.bsky.graph.defs#listView" },
 						"items": {
 							"type": "array",
-							"items": { "type": "ref", "ref": "app.bsky.graph.defs#listItemView" }
+							"items": {
+								"type": "ref",
+								"ref": "app.bsky.graph.defs#listItemView"
+							}
 						}
 					}
 				}

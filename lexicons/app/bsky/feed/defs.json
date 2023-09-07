@@ -8,7 +8,10 @@
 			"properties": {
 				"uri": { "type": "string", "format": "at-uri" },
 				"cid": { "type": "string", "format": "cid" },
-				"author": { "type": "ref", "ref": "app.bsky.actor.defs#profileViewBasic" },
+				"author": {
+					"type": "ref",
+					"ref": "app.bsky.actor.defs#profileViewBasic"
+				},
 				"record": { "type": "unknown" },
 				"embed": {
 					"type": "union",
@@ -50,8 +53,14 @@
 			"type": "object",
 			"required": ["root", "parent"],
 			"properties": {
-				"root": { "type": "union", "refs": ["#postView", "#notFoundPost", "#blockedPost"] },
-				"parent": { "type": "union", "refs": ["#postView", "#notFoundPost", "#blockedPost"] }
+				"root": {
+					"type": "union",
+					"refs": ["#postView", "#notFoundPost", "#blockedPost"]
+				},
+				"parent": {
+					"type": "union",
+					"refs": ["#postView", "#notFoundPost", "#blockedPost"]
+				}
 			}
 		},
 		"reasonRepost": {
@@ -67,10 +76,16 @@
 			"required": ["post"],
 			"properties": {
 				"post": { "type": "ref", "ref": "#postView" },
-				"parent": { "type": "union", "refs": ["#threadViewPost", "#notFoundPost", "#blockedPost"] },
+				"parent": {
+					"type": "union",
+					"refs": ["#threadViewPost", "#notFoundPost", "#blockedPost"]
+				},
 				"replies": {
 					"type": "array",
-					"items": { "type": "union", "refs": ["#threadViewPost", "#notFoundPost", "#blockedPost"] }
+					"items": {
+						"type": "union",
+						"refs": ["#threadViewPost", "#notFoundPost", "#blockedPost"]
+					}
 				}
 			}
 		},
@@ -108,7 +123,11 @@
 				"did": { "type": "string", "format": "did" },
 				"creator": { "type": "ref", "ref": "app.bsky.actor.defs#profileView" },
 				"displayName": { "type": "string" },
-				"description": { "type": "string", "maxGraphemes": 300, "maxLength": 3000 },
+				"description": {
+					"type": "string",
+					"maxGraphemes": 300,
+					"maxLength": 3000
+				},
 				"descriptionFacets": {
 					"type": "array",
 					"items": { "type": "ref", "ref": "app.bsky.richtext.facet" }

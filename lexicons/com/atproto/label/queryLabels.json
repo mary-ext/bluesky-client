@@ -19,7 +19,12 @@
 						"items": { "type": "string", "format": "did" },
 						"description": "Optional list of label sources (DIDs) to filter on"
 					},
-					"limit": { "type": "integer", "minimum": 1, "maximum": 250, "default": 50 },
+					"limit": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 250,
+						"default": 50
+					},
 					"cursor": { "type": "string" }
 				}
 			},

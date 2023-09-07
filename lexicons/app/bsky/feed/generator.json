@@ -11,8 +11,16 @@
 				"required": ["did", "displayName", "createdAt"],
 				"properties": {
 					"did": { "type": "string", "format": "did" },
-					"displayName": { "type": "string", "maxGraphemes": 24, "maxLength": 240 },
-					"description": { "type": "string", "maxGraphemes": 300, "maxLength": 3000 },
+					"displayName": {
+						"type": "string",
+						"maxGraphemes": 24,
+						"maxLength": 240
+					},
+					"description": {
+						"type": "string",
+						"maxGraphemes": 300,
+						"maxLength": 3000
+					},
 					"descriptionFacets": {
 						"type": "array",
 						"items": { "type": "ref", "ref": "app.bsky.richtext.facet" }

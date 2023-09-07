@@ -25,7 +25,10 @@
 						"handle": { "type": "string", "format": "handle" },
 						"did": { "type": "string", "format": "did" },
 						"didDoc": { "type": "unknown" },
-						"collections": { "type": "array", "items": { "type": "string", "format": "nsid" } },
+						"collections": {
+							"type": "array",
+							"items": { "type": "string", "format": "nsid" }
+						},
 						"handleIsCorrect": { "type": "boolean" }
 					}
 				}

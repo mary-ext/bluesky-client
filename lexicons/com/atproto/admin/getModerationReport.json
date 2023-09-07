@@ -14,7 +14,10 @@
 			},
 			"output": {
 				"encoding": "application/json",
-				"schema": { "type": "ref", "ref": "com.atproto.admin.defs#reportViewDetail" }
+				"schema": {
+					"type": "ref",
+					"ref": "com.atproto.admin.defs#reportViewDetail"
+				}
 			}
 		}
 	}

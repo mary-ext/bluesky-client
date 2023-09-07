@@ -1068,6 +1068,11 @@ export interface Objects {
 	'app.bsky.embed.images#image': {
 		image: AtBlob<`image/${string}`>;
 		alt: string;
+		aspectRatio?: RefOf<'app.bsky.embed.images#aspectRatio'>;
+	};
+	'app.bsky.embed.images#aspectRatio': {
+		width: number;
+		height: number;
 	};
 	'app.bsky.embed.images#view': {
 		images: RefOf<'app.bsky.embed.images#viewImage'>[];
@@ -1076,6 +1081,7 @@ export interface Objects {
 		thumb: string;
 		fullsize: string;
 		alt: string;
+		aspectRatio?: RefOf<'app.bsky.embed.images#aspectRatio'>;
 	};
 	'app.bsky.embed.record': {
 		record: RefOf<'com.atproto.repo.strongRef'>;

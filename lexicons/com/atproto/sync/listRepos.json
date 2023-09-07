@@ -8,7 +8,12 @@
 			"parameters": {
 				"type": "params",
 				"properties": {
-					"limit": { "type": "integer", "minimum": 1, "maximum": 1000, "default": 500 },
+					"limit": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 1000,
+						"default": 500
+					},
 					"cursor": { "type": "string" }
 				}
 			},

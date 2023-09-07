@@ -12,7 +12,10 @@
 					"required": ["availableUserDomains"],
 					"properties": {
 						"inviteCodeRequired": { "type": "boolean" },
-						"availableUserDomains": { "type": "array", "items": { "type": "string" } },
+						"availableUserDomains": {
+							"type": "array",
+							"items": { "type": "string" }
+						},
 						"links": { "type": "ref", "ref": "#links" }
 					}
 				}

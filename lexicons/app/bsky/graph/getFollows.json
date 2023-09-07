@@ -10,7 +10,12 @@
 				"required": ["actor"],
 				"properties": {
 					"actor": { "type": "string", "format": "at-identifier" },
-					"limit": { "type": "integer", "minimum": 1, "maximum": 100, "default": 50 },
+					"limit": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 100,
+						"default": 50
+					},
 					"cursor": { "type": "string" }
 				}
 			},
@@ -20,11 +25,17 @@
 					"type": "object",
 					"required": ["subject", "follows"],
 					"properties": {
-						"subject": { "type": "ref", "ref": "app.bsky.actor.defs#profileView" },
+						"subject": {
+							"type": "ref",
+							"ref": "app.bsky.actor.defs#profileView"
+						},
 						"cursor": { "type": "string" },
 						"follows": {
 							"type": "array",
-							"items": { "type": "ref", "ref": "app.bsky.actor.defs#profileView" }
+							"items": {
+								"type": "ref",
+								"ref": "app.bsky.actor.defs#profileView"
+							}
 						}
 					}
 				}

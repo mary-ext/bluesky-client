@@ -10,7 +10,12 @@
 				"properties": {
 					"term": { "type": "string" },
 					"invitedBy": { "type": "string" },
-					"limit": { "type": "integer", "minimum": 1, "maximum": 100, "default": 50 },
+					"limit": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 100,
+						"default": 50
+					},
 					"cursor": { "type": "string" }
 				}
 			},
@@ -21,7 +26,13 @@
 					"required": ["repos"],
 					"properties": {
 						"cursor": { "type": "string" },
-						"repos": { "type": "array", "items": { "type": "ref", "ref": "com.atproto.admin.defs#repoView" } }
+						"repos": {
+							"type": "array",
+							"items": {
+								"type": "ref",
+								"ref": "com.atproto.admin.defs#repoView"
+							}
+						}
 					}
 				}
 			}

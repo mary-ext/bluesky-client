@@ -14,7 +14,11 @@
 						"format": "at-identifier",
 						"description": "The handle or DID of the repo."
 					},
-					"collection": { "type": "string", "format": "nsid", "description": "The NSID of the record type." },
+					"collection": {
+						"type": "string",
+						"format": "nsid",
+						"description": "The NSID of the record type."
+					},
 					"limit": {
 						"type": "integer",
 						"minimum": 1,
@@ -31,7 +35,10 @@
 						"type": "string",
 						"description": "DEPRECATED: The highest sort-ordered rkey to stop at (exclusive)"
 					},
-					"reverse": { "type": "boolean", "description": "Reverse the order of the returned records?" }
+					"reverse": {
+						"type": "boolean",
+						"description": "Reverse the order of the returned records?"
+					}
 				}
 			},
 			"output": {

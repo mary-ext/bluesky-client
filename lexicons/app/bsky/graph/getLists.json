@@ -10,7 +10,12 @@
 				"required": ["actor"],
 				"properties": {
 					"actor": { "type": "string", "format": "at-identifier" },
-					"limit": { "type": "integer", "minimum": 1, "maximum": 100, "default": 50 },
+					"limit": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 100,
+						"default": 50
+					},
 					"cursor": { "type": "string" }
 				}
 			},
