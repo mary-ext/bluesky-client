@@ -192,6 +192,20 @@ export interface Queries {
 			likes: RefOf<'app.bsky.feed.getLikes#like'>[];
 		};
 	};
+	'app.bsky.feed.getListFeed': {
+		params: {
+			list: AtUri;
+			limit?: number;
+			cursor?: string;
+		};
+		response: {
+			cursor?: string;
+			feed: RefOf<'app.bsky.feed.defs#feedViewPost'>[];
+		};
+		errors: {
+			UnknownList: {};
+		};
+	};
 	'app.bsky.feed.getPostThread': {
 		params: {
 			uri: AtUri;
@@ -297,6 +311,16 @@ export interface Queries {
 			items: RefOf<'app.bsky.graph.defs#listItemView'>[];
 		};
 	};
+	'app.bsky.graph.getListBlocks': {
+		params: {
+			limit?: number;
+			cursor?: string;
+		};
+		response: {
+			cursor?: string;
+			lists: RefOf<'app.bsky.graph.defs#listView'>[];
+		};
+	};
 	'app.bsky.graph.getListMutes': {
 		params: {
 			limit?: number;
@@ -326,6 +350,14 @@ export interface Queries {
 		response: {
 			cursor?: string;
 			mutes: RefOf<'app.bsky.actor.defs#profileView'>[];
+		};
+	};
+	'app.bsky.graph.getSuggestedFollowsByActor': {
+		params: {
+			actor: string;
+		};
+		response: {
+			suggestions: RefOf<'app.bsky.actor.defs#profileView'>[];
 		};
 	};
 	'app.bsky.notification.getUnreadCount': {
@@ -618,14 +650,14 @@ export interface Queries {
 	'com.atproto.sync.getRepo': {
 		params: {
 			did: DID;
-			since?: CID;
+			since?: string;
 		};
 		response: unknown;
 	};
 	'com.atproto.sync.listBlobs': {
 		params: {
 			did: DID;
-			since?: CID;
+			since?: string;
 			limit?: number;
 			cursor?: string;
 		};
@@ -977,12 +1009,6 @@ export interface Procedures {
 			hostname: string;
 		};
 	};
-	'com.atproto.temp.upgradeRepoVersion': {
-		data: {
-			did: DID;
-			force?: boolean;
-		};
-	};
 }
 
 export interface Subscriptions {}
@@ -1032,6 +1058,7 @@ export interface Objects {
 		| UnionOf<'app.bsky.actor.defs#adultContentPref'>
 		| UnionOf<'app.bsky.actor.defs#contentLabelPref'>
 		| UnionOf<'app.bsky.actor.defs#savedFeedsPref'>
+		| UnionOf<'app.bsky.actor.defs#personalDetailsPref'>
 	)[];
 	'app.bsky.actor.defs#adultContentPref': {
 		enabled: boolean;
@@ -1043,6 +1070,9 @@ export interface Objects {
 	'app.bsky.actor.defs#savedFeedsPref': {
 		pinned: AtUri[];
 		saved: AtUri[];
+	};
+	'app.bsky.actor.defs#personalDetailsPref': {
+		birthDate?: string;
 	};
 	'app.bsky.embed.external': {
 		external: RefOf<'app.bsky.embed.external#external'>;
@@ -1141,6 +1171,7 @@ export interface Objects {
 		indexedAt: string;
 		viewer?: RefOf<'app.bsky.feed.defs#viewerState'>;
 		labels?: RefOf<'com.atproto.label.defs#label'>[];
+		threadgate?: RefOf<'app.bsky.feed.defs#threadgateView'>;
 	};
 	'app.bsky.feed.defs#viewerState': {
 		repost?: AtUri;
@@ -1176,6 +1207,7 @@ export interface Objects {
 			| UnionOf<'app.bsky.feed.defs#notFoundPost'>
 			| UnionOf<'app.bsky.feed.defs#blockedPost'>
 		)[];
+		viewer?: RefOf<'app.bsky.feed.defs#viewerThreadState'>;
 	};
 	'app.bsky.feed.defs#notFoundPost': {
 		uri: AtUri;
@@ -1189,6 +1221,9 @@ export interface Objects {
 	'app.bsky.feed.defs#blockedAuthor': {
 		did: DID;
 		viewer?: RefOf<'app.bsky.actor.defs#viewerState'>;
+	};
+	'app.bsky.feed.defs#viewerThreadState': {
+		canReply?: boolean;
 	};
 	'app.bsky.feed.defs#generatorView': {
 		uri: AtUri;
@@ -1212,6 +1247,12 @@ export interface Objects {
 	};
 	'app.bsky.feed.defs#skeletonReasonRepost': {
 		repost: AtUri;
+	};
+	'app.bsky.feed.defs#threadgateView': {
+		uri?: AtUri;
+		cid?: CID;
+		record?: unknown;
+		lists?: RefOf<'app.bsky.graph.defs#listViewBasic'>[];
 	};
 	'app.bsky.feed.describeFeedGenerator#feed': {
 		uri: AtUri;
@@ -1238,6 +1279,11 @@ export interface Objects {
 		start: number;
 		end: number;
 	};
+	'app.bsky.feed.threadgate#mentionRule': {};
+	'app.bsky.feed.threadgate#followingRule': {};
+	'app.bsky.feed.threadgate#listRule': {
+		list: AtUri;
+	};
 	'app.bsky.graph.defs#listViewBasic': {
 		uri: AtUri;
 		cid: CID;
@@ -1262,10 +1308,15 @@ export interface Objects {
 	'app.bsky.graph.defs#listItemView': {
 		subject: RefOf<'app.bsky.actor.defs#profileView'>;
 	};
-	'app.bsky.graph.defs#listPurpose': 'app.bsky.graph.defs#modlist' | (string & {});
+	'app.bsky.graph.defs#listPurpose':
+		| 'app.bsky.graph.defs#modlist'
+		| 'app.bsky.graph.defs#curatelist'
+		| (string & {});
 	'app.bsky.graph.defs#modlist': 'app.bsky.graph.defs#modlist';
+	'app.bsky.graph.defs#curatelist': 'app.bsky.graph.defs#curatelist';
 	'app.bsky.graph.defs#listViewerState': {
 		muted?: boolean;
+		blocked?: AtUri;
 	};
 	'app.bsky.notification.listNotifications#notification': {
 		uri: AtUri;
@@ -1613,6 +1664,15 @@ export interface Records {
 		subject: RefOf<'com.atproto.repo.strongRef'>;
 		createdAt: string;
 	};
+	'app.bsky.feed.threadgate': {
+		post: AtUri;
+		allow?: (
+			| UnionOf<'app.bsky.feed.threadgate#mentionRule'>
+			| UnionOf<'app.bsky.feed.threadgate#followingRule'>
+			| UnionOf<'app.bsky.feed.threadgate#listRule'>
+		)[];
+		createdAt: string;
+	};
 	'app.bsky.graph.block': {
 		subject: DID;
 		createdAt: string;
@@ -1628,6 +1688,10 @@ export interface Records {
 		descriptionFacets?: RefOf<'app.bsky.richtext.facet'>[];
 		avatar?: AtBlob<`image/png` | `image/jpeg`>;
 		labels?: UnionOf<'com.atproto.label.defs#selfLabels'>;
+		createdAt: string;
+	};
+	'app.bsky.graph.listblock': {
+		subject: AtUri;
 		createdAt: string;
 	};
 	'app.bsky.graph.listitem': {
