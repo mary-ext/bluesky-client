@@ -81,7 +81,10 @@ export type RPCOptions<T> = BaseRPCOptions &
 export type ResponseOf<T> = T extends { response: any } ? T['response'] : never;
 
 export class XRPC<Queries, Procedures> {
-	constructor(public serviceUri: string, public fetch = defaultFetchHandler) {}
+	constructor(
+		public serviceUri: string,
+		public fetch = defaultFetchHandler,
+	) {}
 
 	get<K extends keyof Queries>(
 		nsid: K,

@@ -7,13 +7,20 @@ export type QueryParams = Record<string, any>;
 export class XRPCResponse<T = any> {
 	success = true;
 
-	constructor(public data: T, public headers: Headers) {}
+	constructor(
+		public data: T,
+		public headers: Headers,
+	) {}
 }
 
 export class XRPCError extends Error {
 	success = false;
 
-	constructor(public status: ResponseType, public error?: string, message?: string) {
+	constructor(
+		public status: ResponseType,
+		public error?: string,
+		message?: string,
+	) {
 		super(message || error);
 		this.name = 'XRPCError';
 	}
