@@ -1059,6 +1059,8 @@ export interface Objects {
 		| UnionOf<'app.bsky.actor.defs#contentLabelPref'>
 		| UnionOf<'app.bsky.actor.defs#savedFeedsPref'>
 		| UnionOf<'app.bsky.actor.defs#personalDetailsPref'>
+		| UnionOf<'app.bsky.actor.defs#feedViewPref'>
+		| UnionOf<'app.bsky.actor.defs#threadViewPref'>
 	)[];
 	'app.bsky.actor.defs#adultContentPref': {
 		enabled: boolean;
@@ -1073,6 +1075,18 @@ export interface Objects {
 	};
 	'app.bsky.actor.defs#personalDetailsPref': {
 		birthDate?: string;
+	};
+	'app.bsky.actor.defs#feedViewPref': {
+		feed: string;
+		hideReplies?: boolean;
+		hideRepliesByUnfollowed?: boolean;
+		hideRepliesByLikeCount?: number;
+		hideReposts?: boolean;
+		hideQuotePosts?: boolean;
+	};
+	'app.bsky.actor.defs#threadViewPref': {
+		sort?: 'oldest' | 'newest' | 'most-likes' | 'random' | (string & {});
+		prioritizeFollowedUsers?: boolean;
 	};
 	'app.bsky.embed.external': {
 		external: RefOf<'app.bsky.embed.external#external'>;
