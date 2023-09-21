@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"target": "ESNext",
 		"lib": ["DOM", "DOM.Iterable", "ESNext"],
-		"module": "ESNext",
+		"module": "Node16",
 		"skipLibCheck": true,
 		"declaration": true,
 		"noEmit": true,
