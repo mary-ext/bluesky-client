@@ -6,18 +6,19 @@ import { type Headers, ResponseType, httpResponseCodeToEnum } from './xrpc-utils
 
 import type { DID, Procedures, Queries } from './atp-schema.js';
 
-interface AtpAccessJwt {
-	scope: 'com.atproto.access';
-	sub: DID;
+export interface JwtToken {
 	exp: number;
 	iat: number;
 }
 
-interface AtpRefreshJwt {
+export interface AtpAccessJwt extends JwtToken {
+	scope: 'com.atproto.access' | 'com.atproto.appPass';
+	sub: DID;
+}
+
+export interface AtpRefreshJwt extends JwtToken {
 	scope: 'com.atproto.refresh';
 	sub: DID;
-	exp: number;
-	iat: number;
 	jti: string;
 }
 
