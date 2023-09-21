@@ -201,6 +201,6 @@ ${wrap(writers.records, 'export interface Records {', '}')}
 
 console.log(`running prettier`);
 const config = await prettier.resolveConfig(outfile);
-const formatted = prettier.format(result, { ...config, parser: 'babel-ts' });
+const formatted = await prettier.format(result, { ...config, parser: 'babel-ts' });
 
 fs.writeFileSync(outfile, formatted);
