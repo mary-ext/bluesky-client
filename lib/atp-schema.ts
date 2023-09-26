@@ -66,6 +66,7 @@ export interface Queries {
 	'app.bsky.actor.searchActors': {
 		params: {
 			term?: string;
+			q?: string;
 			limit?: number;
 			cursor?: string;
 		};
@@ -77,6 +78,7 @@ export interface Queries {
 	'app.bsky.actor.searchActorsTypeahead': {
 		params: {
 			term?: string;
+			q?: string;
 			limit?: number;
 		};
 		response: {
@@ -265,6 +267,21 @@ export interface Queries {
 			feed: RefOf<'app.bsky.feed.defs#feedViewPost'>[];
 		};
 	};
+	'app.bsky.feed.searchPosts': {
+		params: {
+			q: string;
+			limit?: number;
+			cursor?: string;
+		};
+		response: {
+			cursor?: string;
+			hitsTotal?: number;
+			posts: RefOf<'app.bsky.feed.defs#postView'>[];
+		};
+		errors: {
+			BadQueryString: {};
+		};
+	};
 	'app.bsky.graph.getBlocks': {
 		params: {
 			limit?: number;
@@ -414,6 +431,37 @@ export interface Queries {
 			UnknownFeed: {};
 		};
 	};
+	'app.bsky.unspecced.searchActorsSkeleton': {
+		params: {
+			q: string;
+			typeahead?: boolean;
+			limit?: number;
+			cursor?: string;
+		};
+		response: {
+			cursor?: string;
+			hitsTotal?: number;
+			actors: RefOf<'app.bsky.unspecced.defs#skeletonSearchActor'>[];
+		};
+		errors: {
+			BadQueryString: {};
+		};
+	};
+	'app.bsky.unspecced.searchPostsSkeleton': {
+		params: {
+			q: string;
+			limit?: number;
+			cursor?: string;
+		};
+		response: {
+			cursor?: string;
+			hitsTotal?: number;
+			posts: RefOf<'app.bsky.unspecced.defs#skeletonSearchPost'>[];
+		};
+		errors: {
+			BadQueryString: {};
+		};
+	};
 	'com.atproto.admin.getInviteCodes': {
 		params: {
 			sort?: 'recent' | 'usage' | (string & {});
@@ -492,6 +540,7 @@ export interface Queries {
 	'com.atproto.admin.searchRepos': {
 		params: {
 			term?: string;
+			q?: string;
 			invitedBy?: string;
 			limit?: number;
 			cursor?: string;
@@ -715,11 +764,6 @@ export interface Procedures {
 	'app.bsky.notification.updateSeen': {
 		data: {
 			seenAt: string;
-		};
-	};
-	'app.bsky.unspecced.applyLabels': {
-		data: {
-			labels: RefOf<'com.atproto.label.defs#label'>[];
 		};
 	};
 	'com.atproto.admin.disableAccountInvites': {
@@ -1345,7 +1389,11 @@ export interface Objects {
 	};
 	'app.bsky.richtext.facet': {
 		index: RefOf<'app.bsky.richtext.facet#byteSlice'>;
-		features: (UnionOf<'app.bsky.richtext.facet#mention'> | UnionOf<'app.bsky.richtext.facet#link'>)[];
+		features: (
+			| UnionOf<'app.bsky.richtext.facet#mention'>
+			| UnionOf<'app.bsky.richtext.facet#link'>
+			| UnionOf<'app.bsky.richtext.facet#tag'>
+		)[];
 	};
 	'app.bsky.richtext.facet#mention': {
 		did: DID;
@@ -1353,9 +1401,18 @@ export interface Objects {
 	'app.bsky.richtext.facet#link': {
 		uri: string;
 	};
+	'app.bsky.richtext.facet#tag': {
+		tag: string;
+	};
 	'app.bsky.richtext.facet#byteSlice': {
 		byteStart: number;
 		byteEnd: number;
+	};
+	'app.bsky.unspecced.defs#skeletonSearchPost': {
+		uri: AtUri;
+	};
+	'app.bsky.unspecced.defs#skeletonSearchActor': {
+		did: DID;
 	};
 	'com.atproto.admin.defs#actionView': {
 		id: number;
@@ -1672,6 +1729,7 @@ export interface Records {
 			| UnionOf<'app.bsky.embed.recordWithMedia'>;
 		langs?: string[];
 		labels?: UnionOf<'com.atproto.label.defs#selfLabels'>;
+		tags?: string[];
 		createdAt: string;
 	};
 	'app.bsky.feed.repost': {
