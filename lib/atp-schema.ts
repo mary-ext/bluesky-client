@@ -634,6 +634,7 @@ export interface Queries {
 			handle: Handle;
 			did: DID;
 			email?: string;
+			emailConfirmed?: boolean;
 		};
 	};
 	'com.atproto.server.listAppPasswords': {
@@ -930,6 +931,18 @@ export interface Procedures {
 			blob: AtBlob;
 		};
 	};
+	'com.atproto.server.confirmEmail': {
+		data: {
+			email: string;
+			token: string;
+		};
+		errors: {
+			AccountNotFound: {};
+			ExpiredToken: {};
+			InvalidToken: {};
+			InvalidEmail: {};
+		};
+	};
 	'com.atproto.server.createAccount': {
 		data: {
 			email: string;
@@ -994,6 +1007,7 @@ export interface Procedures {
 			handle: Handle;
 			did: DID;
 			email?: string;
+			emailConfirmed?: boolean;
 		};
 		errors: {
 			AccountTakedown: {};
@@ -1023,6 +1037,12 @@ export interface Procedures {
 		};
 	};
 	'com.atproto.server.requestAccountDelete': {};
+	'com.atproto.server.requestEmailConfirmation': {};
+	'com.atproto.server.requestEmailUpdate': {
+		response: {
+			tokenRequired: boolean;
+		};
+	};
 	'com.atproto.server.requestPasswordReset': {
 		data: {
 			email: string;
@@ -1041,6 +1061,17 @@ export interface Procedures {
 	'com.atproto.server.revokeAppPassword': {
 		data: {
 			name: string;
+		};
+	};
+	'com.atproto.server.updateEmail': {
+		data: {
+			email: string;
+			token?: string;
+		};
+		errors: {
+			ExpiredToken: {};
+			InvalidToken: {};
+			TokenRequired: {};
 		};
 	};
 	'com.atproto.sync.notifyOfUpdate': {
