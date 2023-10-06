@@ -1684,6 +1684,7 @@ export interface Objects {
 	'com.atproto.sync.listRepos#repo': {
 		did: DID;
 		head: CID;
+		rev: string;
 	};
 	'com.atproto.sync.subscribeRepos#commit': {
 		seq: number;
