@@ -8,6 +8,8 @@ Lightweight API client for Bluesky/AT Protocol.
 npm install @intrnl/bluesky-client
 ```
 
+This is an [ESM-only library](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c), if you are using TypeScript you'd need to [configure your projects correctly](https://www.typescriptlang.org/tsconfig#moduleResolution) in order to pick up the type declarations.
+
 ## Why?
 
 The official `@atproto/api` library is big! [![library size badge](https://deno.bundlejs.com/badge?q=@atproto/api@latest)](https://bundlejs.com/?q=@atproto/api@latest)
