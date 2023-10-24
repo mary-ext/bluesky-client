@@ -1,12 +1,12 @@
 {
 	"type": "module",
-	"name": "@intrnl/bluesky-client",
+	"name": "@externdefs/bluesky-client",
 	"description": "Lightweight API client for Bluesky/AT Protocol",
-	"version": "0.2.6",
-	"author": "intrnl",
+	"version": "0.3.0",
+	"author": "externdefs",
 	"license": "MIT",
 	"repository": {
-		"url": "https://codeberg.org/intrnl/bluesky-client"
+		"url": "https://github.com/externdefs/bluesky-client"
 	},
 	"files": [
 		"dist",

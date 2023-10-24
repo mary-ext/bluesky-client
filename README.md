@@ -1,11 +1,11 @@
 # bluesky-client
 
-[![library size badge](https://deno.bundlejs.com/badge?q=@intrnl/bluesky-client@latest/agent)](https://bundlejs.com/?q=@intrnl/bluesky-client@latest/agent)
+[![library size badge](https://deno.bundlejs.com/badge?q=@externdefs/bluesky-client@latest/agent)](https://bundlejs.com/?q=@externdefs/bluesky-client@latest/agent)
 
 Lightweight API client for Bluesky/AT Protocol.
 
 ```
-npm install @intrnl/bluesky-client
+npm install @externdefs/bluesky-client
 ```
 
 This is an [ESM-only library](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c), if you are using TypeScript you'd need to [configure your projects correctly](https://www.typescriptlang.org/tsconfig#moduleResolution) in order to pick up the type declarations.
@@ -17,7 +17,7 @@ The official `@atproto/api` library is big! [![library size badge](https://deno.
 - The lexicon codegen generates a ton of classes and functions due to the API being designed around RPC and namespaces. These can't be treeshaken at all if you only need access to some of the endpoints.
 - The library unnecessarily bundles dependencies like `graphemer` and `zod`, which causes duplication in your app code if you also rely on said libraries.
 
-The points above leads to `@intrnl/bluesky-client`, where the following tradeoffs are made instead:
+The points above leads to `@externdefs/bluesky-client`, where the following tradeoffs are made instead:
 
 - We only provide TypeScript definitions for endpoints, objects, and records, **there is no runtime validation done in the library, proceed with caution**.
 - Queries and procedures are not accessed via property access, you're typing the nsid as a string instead.
@@ -42,7 +42,7 @@ The points above leads to `@intrnl/bluesky-client`, where the following tradeoff
 ### Creating an agent to make requests...
 
 ```ts
-import { Agent } from '@intrnl/bluesky-client/agent';
+import { Agent } from '@externdefs/bluesky-client/agent';
 
 const agent = new Agent({ serviceUri: 'https://bsky.social' });
 
@@ -63,7 +63,7 @@ console.log(profile);
 ### Fiddling with AT Protocol schema...
 
 ```ts
-import { type RefOf, type UnionOf } from '@intrnl/bluesky-client/atp-schema';
+import { type RefOf, type UnionOf } from '@externdefs/bluesky-client/atp-schema';
 
 type Facet = RefOf<'app.bsky.richtext.facet'>;
 type MentionFacet = UnionOf<'app.bsky.richtext.facet#mention'>;
