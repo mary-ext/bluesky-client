@@ -6,7 +6,7 @@
 	"author": "externdefs",
 	"license": "MIT",
 	"repository": {
-		"url": "https://github.com/externdefs/bluesky-client"
+		"url": "https://github.com/mary-ext/bluesky-client"
 	},
 	"files": [
 		"dist",
