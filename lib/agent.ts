@@ -4,7 +4,7 @@ import { decodeJwt } from './jwt.js';
 import { type FetchHandlerResponse, defaultFetchHandler, isErrorResponse, XRPC } from './xrpc.js';
 import { type Headers, ResponseType, httpResponseCodeToEnum } from './xrpc-utils.js';
 
-import type { DID, Procedures, Queries } from './atp-schema.js';
+import type { DID, Procedures, Queries, ResponseOf } from './atp-schema.js';
 
 export interface JwtToken {
 	exp: number;
@@ -28,6 +28,7 @@ export interface AtpSessionData {
 	handle: string;
 	did: DID;
 	email?: string;
+	emailConfirmed?: boolean;
 }
 
 export type AgentEventMap = {
@@ -67,13 +68,7 @@ export class Agent extends EventEmitter<AgentEventMap> {
 			},
 		});
 
-		return (this.session = {
-			accessJwt: res.data.accessJwt,
-			refreshJwt: res.data.refreshJwt,
-			handle: res.data.handle,
-			did: res.data.did,
-			email: res.data.email,
-		});
+		return this.#updateSession(res.data);
 	}
 
 	async resumeSession(session: AtpSessionData): Promise<AtpSessionData> {
@@ -178,15 +173,20 @@ export class Agent extends EventEmitter<AgentEventMap> {
 			this.emit('sessionExpired');
 		} else if (httpResponseCodeToEnum(res.status) === ResponseType.Success) {
 			// succeeded, update the session
-			this.session = {
-				accessJwt: res.body.accessJwt,
-				refreshJwt: res.body.refreshJwt,
-				handle: res.body.handle,
-				did: res.body.did,
-			};
-
-			this.emit('sessionUpdate', this.session);
+			this.#updateSession(res.body as ResponseOf<'com.atproto.server.refreshSession'>);
+			this.emit('sessionUpdate', this.session!);
 		}
+	}
+
+	#updateSession(raw: ResponseOf<'com.atproto.server.createSession'>) {
+		return (this.session = {
+			accessJwt: raw.accessJwt,
+			refreshJwt: raw.refreshJwt,
+			handle: raw.handle,
+			did: raw.did,
+			email: raw.email,
+			emailConfirmed: raw.emailConfirmed,
+		});
 	}
 }
 
