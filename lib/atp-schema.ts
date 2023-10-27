@@ -951,12 +951,14 @@ export interface Procedures {
 			inviteCode?: string;
 			password: string;
 			recoveryKey?: string;
+			plcOp?: unknown;
 		};
 		response: {
 			accessJwt: string;
 			refreshJwt: string;
 			handle: Handle;
 			did: DID;
+			didDoc?: unknown;
 		};
 		errors: {
 			InvalidHandle: {};
@@ -1006,6 +1008,7 @@ export interface Procedures {
 			refreshJwt: string;
 			handle: Handle;
 			did: DID;
+			didDoc?: unknown;
 			email?: string;
 			emailConfirmed?: boolean;
 		};
@@ -1031,6 +1034,7 @@ export interface Procedures {
 			refreshJwt: string;
 			handle: Handle;
 			did: DID;
+			didDoc?: unknown;
 		};
 		errors: {
 			AccountTakedown: {};
@@ -1046,6 +1050,11 @@ export interface Procedures {
 	'com.atproto.server.requestPasswordReset': {
 		data: {
 			email: string;
+		};
+	};
+	'com.atproto.server.reserveSigningKey': {
+		response: {
+			signingKey: string;
 		};
 	};
 	'com.atproto.server.resetPassword': {
@@ -1126,6 +1135,7 @@ export interface Objects {
 		mutedByList?: RefOf<'app.bsky.graph.defs#listViewBasic'>;
 		blockedBy?: boolean;
 		blocking?: AtUri;
+		blockingByList?: RefOf<'app.bsky.graph.defs#listViewBasic'>;
 		following?: AtUri;
 		followedBy?: AtUri;
 	};
