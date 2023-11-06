@@ -63,8 +63,7 @@ export class Agent extends EventEmitter<AgentEventMap> {
 	}
 
 	async login(options: AtpLoginOptions): Promise<AtpSessionData> {
-		this.session = undefined;
-		this.rpc.serviceUri = this.serviceUri;
+		this.#resetSession();
 
 		const res = await this.rpc.call('com.atproto.server.createSession', {
 			data: {
@@ -86,8 +85,7 @@ export class Agent extends EventEmitter<AgentEventMap> {
 		}
 
 		const accessToken = decodeJwt(session.accessJwt) as AtpAccessJwt;
-		this.session = session;
-		this.rpc.serviceUri = session.pdsUri || this.serviceUri;
+		this.#resetSession(session);
 
 		if (now >= accessToken.exp) {
 			await this.#refreshSession();
@@ -175,15 +173,18 @@ export class Agent extends EventEmitter<AgentEventMap> {
 
 		if (isErrorResponse(res.body, ['ExpiredToken', 'InvalidToken'])) {
 			// failed due to a bad refresh token
-			this.session = undefined;
-			this.rpc.serviceUri = this.serviceUri;
-
+			this.#resetSession();
 			this.emit('sessionExpired');
 		} else if (httpResponseCodeToEnum(res.status) === ResponseType.Success) {
 			// succeeded, update the session
 			this.#updateSession(res.body as ResponseOf<'com.atproto.server.refreshSession'>);
 			this.emit('sessionUpdate', this.session!);
 		}
+	}
+
+	#resetSession(existing?: AtpSessionData) {
+		this.session = existing;
+		this.rpc.serviceUri = (existing && existing.pdsUri) || this.serviceUri;
 	}
 
 	#updateSession(raw: ResponseOf<'com.atproto.server.createSession'>) {
