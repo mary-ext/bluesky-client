@@ -27,6 +27,7 @@ export interface AtpSessionData {
 	accessJwt: string;
 	handle: string;
 	did: DID;
+	pdsUri?: string;
 	email?: string;
 	emailConfirmed?: boolean;
 }
@@ -45,6 +46,7 @@ export class Agent extends EventEmitter<AgentEventMap> {
 	rpc: XRPC<Queries, Procedures>;
 	fetch: typeof defaultFetchHandler;
 
+	serviceUri: string;
 	session?: AtpSessionData;
 
 	#refreshSessionPromise?: Promise<void>;
@@ -54,12 +56,15 @@ export class Agent extends EventEmitter<AgentEventMap> {
 
 		this.fetch = options.fetch ?? defaultFetchHandler;
 
-		this.rpc = new XRPC(options.serviceUri);
+		this.serviceUri = options.serviceUri;
+
+		this.rpc = new XRPC(this.serviceUri);
 		this.rpc.fetch = this.#fetch.bind(this);
 	}
 
 	async login(options: AtpLoginOptions): Promise<AtpSessionData> {
 		this.session = undefined;
+		this.rpc.serviceUri = this.serviceUri;
 
 		const res = await this.rpc.call('com.atproto.server.createSession', {
 			data: {
@@ -82,6 +87,7 @@ export class Agent extends EventEmitter<AgentEventMap> {
 
 		const accessToken = decodeJwt(session.accessJwt) as AtpAccessJwt;
 		this.session = session;
+		this.rpc.serviceUri = session.pdsUri || this.serviceUri;
 
 		if (now >= accessToken.exp) {
 			await this.#refreshSession();
@@ -156,7 +162,7 @@ export class Agent extends EventEmitter<AgentEventMap> {
 		// manually craft an rpc request
 
 		// send the refresh request
-		const url = new URL(`/xrpc/com.atproto.server.refreshSession`, this.rpc.serviceUri);
+		const url = new URL(`/xrpc/com.atproto.server.refreshSession`, session.pdsUri || this.serviceUri);
 
 		const res = await this.fetch(
 			url.toString(),
@@ -170,6 +176,8 @@ export class Agent extends EventEmitter<AgentEventMap> {
 		if (isErrorResponse(res.body, ['ExpiredToken', 'InvalidToken'])) {
 			// failed due to a bad refresh token
 			this.session = undefined;
+			this.rpc.serviceUri = this.serviceUri;
+
 			this.emit('sessionExpired');
 		} else if (httpResponseCodeToEnum(res.status) === ResponseType.Success) {
 			// succeeded, update the session
@@ -179,18 +187,72 @@ export class Agent extends EventEmitter<AgentEventMap> {
 	}
 
 	#updateSession(raw: ResponseOf<'com.atproto.server.createSession'>) {
+		const didDoc = raw.didDoc as DidDocument | undefined;
+
+		let pdsUri: string | undefined;
+		if (didDoc) {
+			pdsUri = getServiceEndpoint(didDoc, '#atproto_pds', 'AtprotoPersonalDataServer');
+		}
+
+		this.rpc.serviceUri = pdsUri || this.serviceUri;
+
 		return (this.session = {
 			accessJwt: raw.accessJwt,
 			refreshJwt: raw.refreshJwt,
 			handle: raw.handle,
 			did: raw.did,
+			pdsUri: pdsUri,
 			email: raw.email,
 			emailConfirmed: raw.emailConfirmed,
 		});
 	}
 }
 
+const getServiceEndpoint = (doc: DidDocument, serviceId: string, serviceType: string) => {
+	const did = doc.id;
+
+	const didServiceId = did + serviceId;
+	const found = doc.service?.find((service) => service.id === serviceId || service.id === didServiceId);
+
+	if (!found || found.type !== serviceType || typeof found.serviceEndpoint !== 'string') {
+		return undefined;
+	}
+
+	return validateUrl(found.serviceEndpoint);
+};
+
+const validateUrl = (urlStr: string): string | undefined => {
+	let url;
+	try {
+		url = new URL(urlStr);
+	} catch {
+		return undefined;
+	}
+
+	const proto = url.protocol;
+
+	if (url.hostname && (proto === 'http:' || proto === 'https:')) {
+		return urlStr;
+	}
+};
+
 export interface AtpLoginOptions {
 	identifier: string;
 	password: string;
+}
+
+export interface DidDocument {
+	id: string;
+	alsoKnownAs?: string[];
+	verificationMethod?: Array<{
+		id: string;
+		type: string;
+		controller: string;
+		publicKeyMultibase?: string;
+	}>;
+	service?: Array<{
+		id: string;
+		type: string;
+		serviceEndpoint: string | Record<string, unknown>;
+	}>;
 }
