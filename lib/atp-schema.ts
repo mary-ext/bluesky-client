@@ -462,6 +462,12 @@ export interface Queries {
 			BadQueryString: {};
 		};
 	};
+	'com.atproto.admin.getAccountInfo': {
+		params: {
+			did: DID;
+		};
+		response: RefOf<'com.atproto.admin.defs#accountView'>;
+	};
 	'com.atproto.admin.getInviteCodes': {
 		params: {
 			sort?: 'recent' | 'usage' | (string & {});
@@ -537,11 +543,24 @@ export interface Queries {
 			RepoNotFound: {};
 		};
 	};
+	'com.atproto.admin.getSubjectStatus': {
+		params: {
+			did?: DID;
+			uri?: AtUri;
+			blob?: CID;
+		};
+		response: {
+			subject:
+				| UnionOf<'com.atproto.admin.defs#repoRef'>
+				| UnionOf<'com.atproto.repo.strongRef'>
+				| UnionOf<'com.atproto.admin.defs#repoBlobRef'>;
+			takedown?: RefOf<'com.atproto.admin.defs#statusAttr'>;
+		};
+	};
 	'com.atproto.admin.searchRepos': {
 		params: {
 			term?: string;
 			q?: string;
-			invitedBy?: string;
 			limit?: number;
 			cursor?: string;
 		};
@@ -635,6 +654,7 @@ export interface Queries {
 			did: DID;
 			email?: string;
 			emailConfirmed?: boolean;
+			didDoc?: unknown;
 		};
 	};
 	'com.atproto.server.listAppPasswords': {
@@ -843,6 +863,22 @@ export interface Procedures {
 			handle: Handle;
 		};
 	};
+	'com.atproto.admin.updateSubjectStatus': {
+		data: {
+			subject:
+				| UnionOf<'com.atproto.admin.defs#repoRef'>
+				| UnionOf<'com.atproto.repo.strongRef'>
+				| UnionOf<'com.atproto.admin.defs#repoBlobRef'>;
+			takedown?: RefOf<'com.atproto.admin.defs#statusAttr'>;
+		};
+		response: {
+			subject:
+				| UnionOf<'com.atproto.admin.defs#repoRef'>
+				| UnionOf<'com.atproto.repo.strongRef'>
+				| UnionOf<'com.atproto.admin.defs#repoBlobRef'>;
+			takedown?: RefOf<'com.atproto.admin.defs#statusAttr'>;
+		};
+	};
 	'com.atproto.identity.updateHandle': {
 		data: {
 			handle: Handle;
@@ -945,11 +981,11 @@ export interface Procedures {
 	};
 	'com.atproto.server.createAccount': {
 		data: {
-			email: string;
+			email?: string;
 			handle: Handle;
 			did?: DID;
 			inviteCode?: string;
-			password: string;
+			password?: string;
 			recoveryKey?: string;
 			plcOp?: unknown;
 		};
@@ -1053,6 +1089,9 @@ export interface Procedures {
 		};
 	};
 	'com.atproto.server.reserveSigningKey': {
+		data: {
+			did?: string;
+		};
 		response: {
 			signingKey: string;
 		};
@@ -1455,6 +1494,10 @@ export interface Objects {
 	'app.bsky.unspecced.defs#skeletonSearchActor': {
 		did: DID;
 	};
+	'com.atproto.admin.defs#statusAttr': {
+		applied: boolean;
+		ref?: string;
+	};
 	'com.atproto.admin.defs#actionView': {
 		id: number;
 		action: RefOf<'com.atproto.admin.defs#actionType'>;
@@ -1549,11 +1592,26 @@ export interface Objects {
 		invitesDisabled?: boolean;
 		inviteNote?: string;
 	};
+	'com.atproto.admin.defs#accountView': {
+		did: DID;
+		handle: Handle;
+		email?: string;
+		indexedAt: string;
+		invitedBy?: RefOf<'com.atproto.server.defs#inviteCode'>;
+		invites?: RefOf<'com.atproto.server.defs#inviteCode'>[];
+		invitesDisabled?: boolean;
+		inviteNote?: string;
+	};
 	'com.atproto.admin.defs#repoViewNotFound': {
 		did: DID;
 	};
 	'com.atproto.admin.defs#repoRef': {
 		did: DID;
+	};
+	'com.atproto.admin.defs#repoBlobRef': {
+		did: DID;
+		cid: CID;
+		recordUri?: AtUri;
 	};
 	'com.atproto.admin.defs#recordView': {
 		uri: AtUri;
