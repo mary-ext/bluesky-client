@@ -19,6 +19,7 @@ export interface AtpAccessJwt extends JwtToken {
 export interface AtpRefreshJwt extends JwtToken {
 	scope: 'com.atproto.refresh';
 	sub: DID;
+	aud: string;
 	jti: string;
 }
 
