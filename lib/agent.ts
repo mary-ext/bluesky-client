@@ -193,7 +193,7 @@ export class Agent extends EventEmitter<AgentEventMap> {
 
 		let pdsUri: string | undefined;
 		if (didDoc) {
-			pdsUri = getServiceEndpoint(didDoc, '#atproto_pds', 'AtprotoPersonalDataServer');
+			pdsUri = getPdsEndpoint(didDoc);
 		}
 
 		this.rpc.serviceUri = pdsUri || this.serviceUri;
@@ -210,7 +210,11 @@ export class Agent extends EventEmitter<AgentEventMap> {
 	}
 }
 
-const getServiceEndpoint = (doc: DidDocument, serviceId: string, serviceType: string) => {
+export const getPdsEndpoint = (doc: DidDocument) => {
+	return getServiceEndpoint(doc, '#atproto_pds', 'AtprotoPersonalDataServer');
+};
+
+export const getServiceEndpoint = (doc: DidDocument, serviceId: string, serviceType: string) => {
 	const did = doc.id;
 
 	const didServiceId = did + serviceId;
